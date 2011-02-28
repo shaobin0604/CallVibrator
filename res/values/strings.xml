@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Call Vibrator</string>
+    
+    <string name="prefs_category_dial_call_settings">Dial Call Settings</string>
+    <string name="prefs_title_dial_call">Dial Call</string>
+    <string name="prefs_key_dial_call">prefs_key_dial_call</string>
+    
+    <string name="prefs_category_answer_call_settings">Answer Call Settings</string>
+    <string name="prefs_title_answer_call">Answer Call</string>
+    <string name="prefs_key_answer_call">prefs_key_answer_call</string>
+    
+    <string name="prefs_category_end_call_settings">End Call Settings</string>
+    <string name="prefs_title_end_call">End Call</string>
+    <string name="prefs_key_end_call">prefs_key_end_call</string>
+    
+    <string name="prefs_category_general_settings">General Settings</string>
+    <string name="prefs_title_auto_start">Run on Startup</string>
+    <string name="prefs_key_auto_start">prefs_key_auto_start</string>
+    
+    <string name="prefs_category_info">Information</string>
+    <string name="prefs_title_version">Version</string>
+    <string name="prefs_summary_version">0.1.0</string>
+    
+    <string name="prefs_title_contact">Contact Author</string>
+    <string name="prefs_summary_contact">shaobin0604@qq.com</string>
+    
+    <string name="prefs_title_more">My Other Apps</string>
+    <string name="prefs_summary_more">http://aquarium-apps.heroku.com/my_apps.html</string>
+    
+    <string name="stat_running">Call Vibrator is running</string>
+    <string name="content_text">Dial: %s, Answer: %s, End: %s</string>
+    
+    
+    <string name="on">On</string>
+    <string name="off">Off</string>
+</resources>

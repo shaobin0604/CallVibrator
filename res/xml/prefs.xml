@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen
+  xmlns:android="http://schemas.android.com/apk/res/android">
+  	<PreferenceCategory android:title="@string/prefs_category_dial_call_settings">
+  		<CheckBoxPreference android:title="@string/prefs_title_dial_call"
+  			android:key="@string/prefs_key_dial_call"
+  			android:defaultValue="false"
+  			android:summaryOn="@string/on"
+  			android:summaryOff="@string/off"/>
+  	</PreferenceCategory>
+  	
+  	<PreferenceCategory android:title="@string/prefs_category_answer_call_settings">
+  		<CheckBoxPreference android:title="@string/prefs_title_answer_call"
+  			android:key="@string/prefs_key_answer_call"
+  			android:defaultValue="false"
+  			android:summaryOn="@string/on"
+  			android:summaryOff="@string/off"/>
+  	</PreferenceCategory>
+  	
+  	
+  	<PreferenceCategory android:title="@string/prefs_category_end_call_settings">
+  		<CheckBoxPreference android:title="@string/prefs_title_end_call"
+  			android:key="@string/prefs_key_end_call"
+  			android:defaultValue="false"
+  			android:summaryOn="@string/on"
+  			android:summaryOff="@string/off"/>
+  	</PreferenceCategory>
+  	
+  	<PreferenceCategory android:title="@string/prefs_category_general_settings">
+  		<CheckBoxPreference android:title="@string/prefs_title_auto_start"
+  			android:key="@string/prefs_key_auto_start"
+  			android:defaultValue="false"
+  			android:summaryOn="@string/on"
+  			android:summaryOff="@string/off"/>
+  	</PreferenceCategory>
+  	
+  	<PreferenceCategory android:title="@string/prefs_category_info">
+  		<Preference android:title="@string/prefs_title_version"
+  			android:persistent="false"
+  			android:summary="@string/prefs_summary_version"/>
+  		<Preference android:title="@string/prefs_title_contact"
+  			android:persistent="false"
+  			android:summary="@string/prefs_summary_contact"/>
+  		<Preference android:title="@string/prefs_title_more"
+  			android:persistent="false"
+  			android:summary="@string/prefs_summary_more"/>
+  	</PreferenceCategory>
+</PreferenceScreen>

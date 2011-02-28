@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">通话震动</string>
+    
+    <string name="prefs_category_dial_call_settings">拨出震动设置</string>
+    <string name="prefs_title_dial_call">拨出震动</string>
+    <string name="prefs_key_dial_call">prefs_key_dial_call</string>
+    
+    <string name="prefs_category_answer_call_settings">呼入震动设置</string>
+    <string name="prefs_title_answer_call">呼入震动</string>
+    <string name="prefs_key_answer_call">prefs_key_answer_call</string>
+    
+    <string name="prefs_category_end_call_settings">挂断震动设置</string>
+    <string name="prefs_title_end_call">挂断震动</string>
+    <string name="prefs_key_end_call">prefs_key_end_call</string>
+    
+    <string name="prefs_category_general_settings">常规设置</string>
+    <string name="prefs_title_auto_start">开机启动</string>
+    <string name="prefs_key_auto_start">prefs_key_auto_start</string>
+    
+    <string name="prefs_category_info">信息</string>
+    
+    <string name="prefs_title_version">版本</string>
+    <string name="prefs_title_contact">联系作者</string>
+    <string name="prefs_title_more">我的其他应用</string>
+    
+    <string name="stat_running">通话震动正在运行中</string>
+    <string name="content_text">拨出: %s, 呼入: %s, 挂断: %s</string>
+    
+    <string name="on">开</string>
+    <string name="off">关</string>
+</resources>
