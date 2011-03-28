@@ -1,5 +1,6 @@
 package cn.yo2.aquarium.callvibrator;
 
+import android.app.ActivityManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -19,7 +20,8 @@ public class BootCompleteReceiver extends BroadcastReceiver {
 			boolean autoStart = sharedPreferences.getBoolean(context.getString(R.string.prefs_key_auto_start), false);
 			
 			if (autoStart) {
-				Utils.sendCommand(context, Utils.buidOptionsFromPrefs(context));
+				Intent service = new Intent(context, CallStateService.class);
+		        context.startService(service);
 			}
 		}
 	}

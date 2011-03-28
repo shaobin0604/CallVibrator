@@ -1,20 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen
   xmlns:android="http://schemas.android.com/apk/res/android">
-  	<PreferenceCategory android:title="@string/prefs_category_dial_call_settings">
-  		<CheckBoxPreference android:title="@string/prefs_title_dial_call"
-  			android:key="@string/prefs_key_dial_call"
+  	<PreferenceCategory android:title="@string/prefs_category_outgoing_call_settings">
+  		<CheckBoxPreference android:title="@string/prefs_title_outgoing_call"
+  			android:key="@string/prefs_key_outgoing_call"
   			android:defaultValue="false"
   			android:summaryOn="@string/on"
   			android:summaryOff="@string/off"/>
+  			
+  		 <ListPreference android:title="@string/prefs_title_vibrate_mode"
+  		 	android:key="@string/prefs_key_outgoing_call_vibrate_mode"
+  		 	android:dialogTitle="@string/prefs_title_vibrate_mode"
+  		 	android:entries="@array/vibrate_mode_entries"
+  		 	android:entryValues="@array/vibrate_mode_entry_values"
+  		 	android:defaultValue="0"
+  		 	android:dependency="@string/prefs_key_outgoing_call"/>
+  		 	
   	</PreferenceCategory>
   	
-  	<PreferenceCategory android:title="@string/prefs_category_answer_call_settings">
-  		<CheckBoxPreference android:title="@string/prefs_title_answer_call"
-  			android:key="@string/prefs_key_answer_call"
+  	<PreferenceCategory android:title="@string/prefs_category_incoming_call_settings">
+  		<CheckBoxPreference android:title="@string/prefs_title_incoming_call"
+  			android:key="@string/prefs_key_incoming_call"
   			android:defaultValue="false"
   			android:summaryOn="@string/on"
   			android:summaryOff="@string/off"/>
+  		<ListPreference android:title="@string/prefs_title_vibrate_mode"
+  		 	android:key="@string/prefs_key_incoming_call_vibrate_mode"
+  		 	android:dialogTitle="@string/prefs_title_vibrate_mode"
+  		 	android:entries="@array/vibrate_mode_entries"
+  		 	android:entryValues="@array/vibrate_mode_entry_values"
+  		 	android:defaultValue="0"
+  		 	android:dependency="@string/prefs_key_incoming_call"/>
   	</PreferenceCategory>
   	
   	
@@ -24,6 +40,13 @@
   			android:defaultValue="false"
   			android:summaryOn="@string/on"
   			android:summaryOff="@string/off"/>
+  		<ListPreference android:title="@string/prefs_title_vibrate_mode"
+  		 	android:key="@string/prefs_key_end_call_vibrate_mode"
+  		 	android:dialogTitle="@string/prefs_title_vibrate_mode"
+  		 	android:entries="@array/vibrate_mode_entries"
+  		 	android:entryValues="@array/vibrate_mode_entry_values"
+  		 	android:defaultValue="0"
+  		 	android:dependency="@string/prefs_key_end_call"/>
   	</PreferenceCategory>
   	
   	<PreferenceCategory android:title="@string/prefs_category_general_settings">
@@ -35,14 +58,11 @@
   	</PreferenceCategory>
   	
   	<PreferenceCategory android:title="@string/prefs_category_info">
-  		<Preference android:title="@string/prefs_title_version"
+  		<Preference android:key="@string/prefs_key_about" 
+  			android:title="@string/prefs_title_about"
+  			android:persistent="false"/>
+  		<Preference android:title="@string/prefs_title_donate_author"
   			android:persistent="false"
-  			android:summary="@string/prefs_summary_version"/>
-  		<Preference android:title="@string/prefs_title_contact"
-  			android:persistent="false"
-  			android:summary="@string/prefs_summary_contact"/>
-  		<Preference android:title="@string/prefs_title_more"
-  			android:persistent="false"
-  			android:summary="@string/prefs_summary_more"/>
+  			android:summary="@string/prefs_summary_donate_author"/>
   	</PreferenceCategory>
 </PreferenceScreen>

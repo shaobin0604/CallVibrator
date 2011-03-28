@@ -2,31 +2,35 @@
 <resources>
     <string name="app_name">通话震动</string>
     
-    <string name="prefs_category_dial_call_settings">拨出震动设置</string>
-    <string name="prefs_title_dial_call">拨出震动</string>
-    <string name="prefs_key_dial_call">prefs_key_dial_call</string>
+    <string name="prefs_category_outgoing_call_settings">去电接通震动</string>
+    <string name="prefs_title_outgoing_call">拨出通话接通时震动</string>
     
-    <string name="prefs_category_answer_call_settings">呼入震动设置</string>
-    <string name="prefs_title_answer_call">呼入震动</string>
-    <string name="prefs_key_answer_call">prefs_key_answer_call</string>
+    <string name="prefs_category_incoming_call_settings">来电接通震动</string>
+    <string name="prefs_title_incoming_call">呼入通话接通时震动</string>
     
-    <string name="prefs_category_end_call_settings">挂断震动设置</string>
-    <string name="prefs_title_end_call">挂断震动</string>
-    <string name="prefs_key_end_call">prefs_key_end_call</string>
+    <string name="prefs_category_end_call_settings">通话挂断震动</string>
+    <string name="prefs_title_end_call">通话挂断时震动</string>
     
     <string name="prefs_category_general_settings">常规设置</string>
     <string name="prefs_title_auto_start">开机启动</string>
-    <string name="prefs_key_auto_start">prefs_key_auto_start</string>
     
     <string name="prefs_category_info">信息</string>
     
-    <string name="prefs_title_version">版本</string>
-    <string name="prefs_title_contact">联系作者</string>
-    <string name="prefs_title_more">我的其他应用</string>
+	<string name="prefs_title_about">关于通話震動</string>
+    <string name="prefs_summary_about">版本: %1$s</string>
+    
+    <string name="prefs_title_donate_author">捐助作者</string>
+    <string name="prefs_summary_donate_author">支付宝: shaobin0604@163.com</string>
+    
+    <string name="text_contact_author">邮件: shaobin0604@qq.com</string>
+    
+    <string name="text_more">我的其他应用</string>
     
     <string name="stat_running">通话震动正在运行中</string>
-    <string name="content_text">拨出: %s, 呼入: %s, 挂断: %s</string>
+    <string name="content_text">去电: %1$s, 来电: %2$s, 挂断: %3$s</string>
     
-    <string name="on">开</string>
-    <string name="off">关</string>
+    <string name="prefs_title_vibrate_mode">震动模式</string>
+    
+    <string name="on">开启</string>
+    <string name="off">关闭</string>
 </resources>

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string-array name="vibrate_mode_entries">
+		<item>壹次短震</item>
+		<item>兩次短震</item>
+		<item>壹長壹短</item>
+	</string-array>
+</resources>

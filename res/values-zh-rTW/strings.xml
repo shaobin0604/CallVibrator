@@ -2,32 +2,35 @@
 <resources>
     <string name="app_name">通話震動</string>
     
-    <string name="prefs_category_dial_call_settings">撥出震動設置</string>
-    <string name="prefs_title_dial_call">撥出震動</string>
-    <string name="prefs_key_dial_call">prefs_key_dial_call</string>
+    <string name="prefs_category_outgoing_call_settings">去電接通震動</string>
+    <string name="prefs_title_outgoing_call">撥出通話接通時震動</string>
     
-    <string name="prefs_category_answer_call_settings">呼入震動設置</string>
-    <string name="prefs_title_answer_call">呼入震動</string>
-    <string name="prefs_key_answer_call">prefs_key_answer_call</string>
+    <string name="prefs_category_incoming_call_settings">來電接通震動</string>
+    <string name="prefs_title_incoming_call">呼入通話接通時震動</string>
     
-    <string name="prefs_category_end_call_settings">掛斷震動設置</string>
-    <string name="prefs_title_end_call">掛斷震動</string>
-    <string name="prefs_key_end_call">prefs_key_end_call</string>
+    <string name="prefs_category_end_call_settings">通話掛斷震動</string>
+    <string name="prefs_title_end_call">通話掛斷時震動</string>
     
     <string name="prefs_category_general_settings">常規設置</string>
     <string name="prefs_title_auto_start">開機啟動</string>
-    <string name="prefs_key_auto_start">prefs_key_auto_start</string>
     
     <string name="prefs_category_info">信息</string>
-     <string name="prefs_title_version">版本</string>
-    <string name="prefs_title_contact">聯系作者</string>
-    <string name="prefs_title_more">我的其他應用</string>
     
+	<string name="prefs_title_about">關於通話震動</string>
+    <string name="prefs_summary_about">版本: %1$s</string>
+    
+    <string name="prefs_title_donate_author">捐助作者</string>
+    <string name="prefs_summary_donate_author">支付寶: shaobin0604@163.com</string>
+    
+    <string name="text_contact_author">郵件: shaobin0604@qq.com</string>
+    
+    <string name="text_more">我的其他應用</string>
     
     <string name="stat_running">通話震動正在運行中</string>
-    <string name="content_text">撥出: %s, 呼入: %s, 掛斷: %s</string>
-   
+    <string name="content_text">去電: %1$s, 來電: %2$s, 掛斷: %3$s</string>
     
-    <string name="on">開</string>
-    <string name="off">關</string>
+    <string name="prefs_title_vibrate_mode">震動模式</string>
+    
+    <string name="on">開啟</string>
+    <string name="off">關閉</string>
 </resources>

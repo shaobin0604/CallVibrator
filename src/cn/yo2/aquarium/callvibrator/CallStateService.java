@@ -6,41 +6,42 @@ import java.io.InputStreamReader;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import android.app.Activity;
 import android.app.Notification;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
-import android.os.Bundle;
+import android.content.SharedPreferences;
 import android.os.IBinder;
 import android.os.Vibrator;
+import android.preference.PreferenceManager;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.util.Log;
 
 public class CallStateService extends Service {
-	private static final String PACKAGE = CallStateService.class.getPackage().getName();
 	private static final String TAG = CallStateService.class.getSimpleName();
 	
+	private static final int VIBRATE_MODE_SHORT = 50;
+	private static final long[] VIBRATE_MODE_SHORT_SHORT = {0, 50, 400, 50 };
+	private static final long[] VIBRATE_MODE_LONG_SHORT = {0, 200, 400, 50};
 	
-	public static final int DIAL_CALL   = 0x00000001;
-	public static final int ANSWER_CALL = 0x00000002;
-	public static final int END_CALL    = 0x00000004;
 	
-	public static final String EXTRAS_START_OPTIONS = PACKAGE + ".extras";
-
 	private TelephonyManager mTelephonyManager;
 	private int mLastCallState;
 	private int mCurrCallState;
 
 	private Vibrator mVibrator;
 
-	private DialCallWorkerThread mWorkerThread;
+	private OutgoingCallWorkerThread mWorkerThread;
 	
-	private boolean mListenDialCall;
-	private boolean mListenAnswerCall;
+	private boolean mListenOutgoingCall;
+	private boolean mListenIncomingCall;
 	private boolean mListenEndCall;
+	
+	private int mOutgoingCallVibrateMode;
+	private int mIncomingCallVibrateMode;
+	private int mEndCallVibrateMode;
 
 	private PhoneStateListener mListener = new PhoneStateListener() {
 
@@ -57,7 +58,7 @@ public class CallStateService extends Service {
 					if (mLastCallState == TelephonyManager.CALL_STATE_OFFHOOK || mLastCallState == TelephonyManager.CALL_STATE_RINGING) {
 						Log.d(TAG, "Call End, vibrate");
 						
-						vibrate();
+						vibrate(mEndCallVibrateMode);
 					}
 				}
 				
@@ -67,17 +68,17 @@ public class CallStateService extends Service {
 			case TelephonyManager.CALL_STATE_OFFHOOK:
 				Log.d(TAG, "TelephonyManager.CALL_STATE_OFFHOOK -> "
 						+ incomingNumber);
-				if (mListenDialCall) {
+				if (mListenOutgoingCall) {
 					if (mLastCallState == TelephonyManager.CALL_STATE_IDLE) {
 						Log.d(TAG, "Dial Call, start worker thread");
 						startWorkerThread();
 					}
 				}
 				
-				if (mListenAnswerCall) {
+				if (mListenIncomingCall) {
 					if (mLastCallState == TelephonyManager.CALL_STATE_RINGING) {
 						Log.d(TAG, "Answer Call, vibrate");
-						vibrate();
+						vibrate(mIncomingCallVibrateMode);
 					}
 				}
 				break;
@@ -96,7 +97,7 @@ public class CallStateService extends Service {
 	private void startWorkerThread() {
 		stopWorkerThread();
 
-		mWorkerThread = new DialCallWorkerThread();
+		mWorkerThread = new OutgoingCallWorkerThread();
 
 		mWorkerThread.start();
 	}
@@ -140,21 +141,30 @@ public class CallStateService extends Service {
 	
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
-		Bundle extras = intent.getExtras();
+		SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
 		
-		if (extras != null) {
-			int options = extras.getInt(EXTRAS_START_OPTIONS);
-			
-			if (options != 0) {
-				mListenDialCall = ((options & DIAL_CALL) != 0);
-				mListenAnswerCall = ((options & ANSWER_CALL) != 0);
-				mListenEndCall = ((options & END_CALL) != 0);
-			}
-		}
+		mListenOutgoingCall = sharedPreferences.getBoolean(getString(R.string.prefs_key_outgoing_call), false);
+		mListenIncomingCall = sharedPreferences.getBoolean(getString(R.string.prefs_key_incoming_call), false);
+		mListenEndCall = sharedPreferences.getBoolean(getString(R.string.prefs_key_end_call), false);
 		
-		Log.d(TAG, "Dial Call   -> " + mListenDialCall);
-		Log.d(TAG, "Answer Call -> " + mListenAnswerCall);
+		Log.d(TAG, "Outgoing Call   -> " + mListenOutgoingCall);
+		Log.d(TAG, "Incoming Call -> " + mListenIncomingCall);
 		Log.d(TAG, "End Call    -> " + mListenEndCall);
+		
+		mOutgoingCallVibrateMode = Integer.valueOf(sharedPreferences.getString(getString(R.string.prefs_key_outgoing_call_vibrate_mode), "0"));
+		mIncomingCallVibrateMode = Integer.valueOf(sharedPreferences.getString(getString(R.string.prefs_key_incoming_call_vibrate_mode), "0"));
+		mEndCallVibrateMode = Integer.valueOf(sharedPreferences.getString(getString(R.string.prefs_key_end_call_vibrate_mode), "0"));
+		
+		Log.d(TAG, String.format("Outgoing Call[%s], mode =  %d", String.valueOf(mListenOutgoingCall), mOutgoingCallVibrateMode));
+		Log.d(TAG, String.format("Incoming Call[%s], mode =  %d", String.valueOf(mListenIncomingCall), mIncomingCallVibrateMode));
+		Log.d(TAG, String.format("End      Call[%s], mode =  %d", String.valueOf(mListenEndCall), mEndCallVibrateMode));
+		
+		if (!mListenOutgoingCall && !mListenIncomingCall && !mListenEndCall) {
+			Log.d(TAG, "Nothing to listen, stop service");
+			
+			stopSelf(startId);
+			return START_STICKY;
+		}
 		
 		Notification notification = new Notification(R.drawable.ic_stat, getString(R.string.stat_running), System.currentTimeMillis());
 		
@@ -162,8 +172,8 @@ public class CallStateService extends Service {
 		final String off = getString(R.string.off);
 		
 		String contentText = getString(R.string.content_text, 
-				mListenDialCall ? on : off,
-				mListenAnswerCall ? on : off,
+				mListenOutgoingCall ? on : off,
+				mListenIncomingCall ? on : off,
 				mListenEndCall ? on :off);
 		
 		PendingIntent contentIntent = PendingIntent.getActivity(this, 0, new Intent(this, MainActivity.class), Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -175,7 +185,7 @@ public class CallStateService extends Service {
 		return START_STICKY;
 	}
 
-	private class DialCallWorkerThread extends Thread {
+	private class OutgoingCallWorkerThread extends Thread {
 
 		private volatile boolean mIsThreadKill;
 
@@ -188,30 +198,26 @@ public class CallStateService extends Service {
 		}
 
 		public void run() {
-			runLog();
-		}
-
-		private void runLog() {
 			Process process = null;
 			BufferedReader reader = null;
 			try {
 				Runtime runtime = Runtime.getRuntime();
-
+			
 				// TODO: not good, try another method
 				// clean log
 				// runtime.exec("/system/bin/logcat -c -b radio");
-
+			
 				// run logcat
 				process = runtime.exec("/system/bin/logcat -b radio -s GSM:D");
-
+			
 				reader = new BufferedReader(new InputStreamReader(process
 						.getInputStream()));
-
+			
 				String line;
-
+			
 				while (!killRequested()) {
 					line = reader.readLine();
-
+			
 					if (!TextUtils.isEmpty(line)) {
 						logLine(line);
 					}
@@ -220,16 +226,16 @@ public class CallStateService extends Service {
 				Log.e(TAG, "Error when execute logcat", e);
 			} finally {
 				Log.i(TAG, "Exit close resource");
-
+			
 				if (reader != null) {
 					try {
 						reader.close();
 					} catch (IOException e) {
 						Log.e(TAG, "Reader close error", e);
 					}
-
+			
 				}
-
+			
 				if (process != null) {
 					process.destroy();
 				}
@@ -255,7 +261,7 @@ public class CallStateService extends Service {
 				if (Math.abs(time - connectTime) < 100) {
 					Log.d(TAG, "************ Vibrate ***************");
 
-					vibrate();
+					vibrate(mOutgoingCallVibrateMode);
 				}
 			}
 		}
@@ -274,7 +280,18 @@ public class CallStateService extends Service {
 		mTelephonyManager.listen(mListener, PhoneStateListener.LISTEN_NONE);
 	}
 
-	private void vibrate() {
-		mVibrator.vibrate(50);
+	private void vibrate(int mode) {
+		switch (mode) {
+		case 1:
+			mVibrator.vibrate(VIBRATE_MODE_SHORT_SHORT, -1);
+			break;
+		case 2:
+			mVibrator.vibrate(VIBRATE_MODE_LONG_SHORT, -1);
+			break;
+		default:
+			mVibrator.vibrate(VIBRATE_MODE_SHORT);
+			break;
+		}
+		
 	}
 }
