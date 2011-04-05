@@ -1,6 +1,6 @@
 # built application files
-*.apk
-*.ap_
+bin/*.apk
+bin/*.ap_
 
 # files for the dex VM
 *.dex
@@ -10,4 +10,7 @@
 
 # generated GUI files
 *R.java
+
+# vim backup files
+*~
 

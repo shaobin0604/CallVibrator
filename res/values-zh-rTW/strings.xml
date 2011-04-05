@@ -19,7 +19,7 @@
 	<string name="prefs_title_about">關於通話震動</string>
     <string name="prefs_summary_about">版本: %1$s</string>
     
-    <string name="prefs_title_donate_author">捐助作者</string>
+    <string name="prefs_title_donate_author">捐助作者開發</string>
     <string name="prefs_summary_donate_author">支付寶: shaobin0604@163.com</string>
     
     <string name="text_contact_author">郵件: shaobin0604@qq.com</string>
