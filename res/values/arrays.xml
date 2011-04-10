@@ -11,4 +11,16 @@
 		<item>1</item>
 		<item>2</item>
 	</string-array>
+	
+	<string-array name="vibrate_interval_entries">
+		<item>45 sec</item>
+		<item>50 sec</item>
+		<item>55 sec</item>
+	</string-array>
+	
+	<string-array name="vibrate_interval_entry_values">
+		<item>45</item>
+		<item>50</item>
+		<item>55</item>
+	</string-array>
 </resources>

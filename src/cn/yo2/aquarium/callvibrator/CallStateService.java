@@ -35,6 +35,13 @@ public class CallStateService extends Service {
 
 	private OutgoingCallWorkerThread mWorkerThread;
 	
+//	private boolean mInCall;
+//	
+//	private boolean mReminder;
+//	private int mReminderIntervalMillis;
+	
+	private boolean mShowNotification;
+	
 	private boolean mListenOutgoingCall;
 	private boolean mListenIncomingCall;
 	private boolean mListenEndCall;
@@ -42,6 +49,30 @@ public class CallStateService extends Service {
 	private int mOutgoingCallVibrateMode;
 	private int mIncomingCallVibrateMode;
 	private int mEndCallVibrateMode;
+	
+//	private static final int WHAT_REMINDER_VIBRATE = 1;
+	
+//	private Handler mHandler = new Handler() {
+//
+//		@Override
+//		public void handleMessage(Message msg) {
+//			switch (msg.what) {
+//			case WHAT_REMINDER_VIBRATE:
+//				if (mReminder && mInCall) {
+//					Log.d(TAG, "interval time out, vibrate");
+//					
+//					mVibrator.vibrate(VIBRATE_MODE_SHORT);
+//					
+//					this.sendEmptyMessageDelayed(WHAT_REMINDER_VIBRATE, mReminderIntervalMillis);
+//				}
+//				break;
+//
+//			default:
+//				break;
+//			}
+//		}
+//		
+//	};
 
 	private PhoneStateListener mListener = new PhoneStateListener() {
 
@@ -51,12 +82,15 @@ public class CallStateService extends Service {
 			mCurrCallState = state;
 			switch (state) {
 			case TelephonyManager.CALL_STATE_IDLE:
-				Log.d(TAG, "TelephonyManager.CALL_STATE_IDLE -> "
+				Log.d(TAG, "[onCallStateChanged] TelephonyManager.CALL_STATE_IDLE -> "
 						+ incomingNumber);
+				
+//				mInCall = false;
+//				mHandler.removeMessages(WHAT_REMINDER_VIBRATE);
 				
 				if (mListenEndCall) {
 					if (mLastCallState == TelephonyManager.CALL_STATE_OFFHOOK || mLastCallState == TelephonyManager.CALL_STATE_RINGING) {
-						Log.d(TAG, "Call End, vibrate");
+						Log.d(TAG, "[onCallStateChanged] Call End, vibrate");
 						
 						vibrate(mEndCallVibrateMode);
 					}
@@ -68,22 +102,33 @@ public class CallStateService extends Service {
 			case TelephonyManager.CALL_STATE_OFFHOOK:
 				Log.d(TAG, "TelephonyManager.CALL_STATE_OFFHOOK -> "
 						+ incomingNumber);
-				if (mListenOutgoingCall) {
-					if (mLastCallState == TelephonyManager.CALL_STATE_IDLE) {
-						Log.d(TAG, "Dial Call, start worker thread");
+
+				if (mLastCallState == TelephonyManager.CALL_STATE_IDLE) {
+					Log.d(TAG, "[onCallStateChanged] start outgoing call, ring");
+					if (mListenOutgoingCall /*|| mReminder*/) {
+						Log.d(TAG, "[onCallStateChanged] outgoing call, start worker thread");
 						startWorkerThread();
 					}
-				}
-				
-				if (mListenIncomingCall) {
-					if (mLastCallState == TelephonyManager.CALL_STATE_RINGING) {
-						Log.d(TAG, "Answer Call, vibrate");
+				} else if (mLastCallState == TelephonyManager.CALL_STATE_RINGING) {
+					Log.d(TAG, "[onCallStateChanged] incoming call in call");
+//					mInCall = true;
+					if (mListenIncomingCall) {
+						Log.d(TAG, "[onCallStateChanged] incoming Call, vibrate");
 						vibrate(mIncomingCallVibrateMode);
 					}
+					
+//					if (mReminder) {
+//						mHandler.removeMessages(WHAT_REMINDER_VIBRATE);
+//						
+//						mHandler.sendEmptyMessageDelayed(WHAT_REMINDER_VIBRATE, mReminderIntervalMillis);
+//					}
 				}
 				break;
 			case TelephonyManager.CALL_STATE_RINGING:
-				Log.d(TAG, "TelephonyManager.CALL_STATE_RINGING -> "
+//				mHandler.removeMessages(WHAT_REMINDER_VIBRATE);
+//				mInCall = false;
+				
+				Log.d(TAG, "[onCallStateChanged] TelephonyManager.CALL_STATE_RINGING -> "
 						+ incomingNumber);
 				break;
 
@@ -147,25 +192,48 @@ public class CallStateService extends Service {
 		mListenIncomingCall = sharedPreferences.getBoolean(getString(R.string.prefs_key_incoming_call), false);
 		mListenEndCall = sharedPreferences.getBoolean(getString(R.string.prefs_key_end_call), false);
 		
-		Log.d(TAG, "Outgoing Call   -> " + mListenOutgoingCall);
+//		mReminder = sharedPreferences.getBoolean(getString(R.string.prefs_key_reminder), false);
+
+		Log.d(TAG, "Outgoing Call -> " + mListenOutgoingCall);
 		Log.d(TAG, "Incoming Call -> " + mListenIncomingCall);
-		Log.d(TAG, "End Call    -> " + mListenEndCall);
+		Log.d(TAG, "End      Call -> " + mListenEndCall);
+//		Log.d(TAG, "Reminder      -> " + mReminder);
 		
-		mOutgoingCallVibrateMode = Integer.valueOf(sharedPreferences.getString(getString(R.string.prefs_key_outgoing_call_vibrate_mode), "0"));
-		mIncomingCallVibrateMode = Integer.valueOf(sharedPreferences.getString(getString(R.string.prefs_key_incoming_call_vibrate_mode), "0"));
-		mEndCallVibrateMode = Integer.valueOf(sharedPreferences.getString(getString(R.string.prefs_key_end_call_vibrate_mode), "0"));
-		
-		Log.d(TAG, String.format("Outgoing Call[%s], mode =  %d", String.valueOf(mListenOutgoingCall), mOutgoingCallVibrateMode));
-		Log.d(TAG, String.format("Incoming Call[%s], mode =  %d", String.valueOf(mListenIncomingCall), mIncomingCallVibrateMode));
-		Log.d(TAG, String.format("End      Call[%s], mode =  %d", String.valueOf(mListenEndCall), mEndCallVibrateMode));
-		
-		if (!mListenOutgoingCall && !mListenIncomingCall && !mListenEndCall) {
+		if (!mListenOutgoingCall && !mListenIncomingCall && !mListenEndCall /*&& !mReminder*/) {
 			Log.d(TAG, "Nothing to listen, stop service");
 			
 			stopSelf(startId);
 			return START_STICKY;
 		}
 		
+		mOutgoingCallVibrateMode = Integer.valueOf(sharedPreferences.getString(getString(R.string.prefs_key_outgoing_call_vibrate_mode), "0"));
+		mIncomingCallVibrateMode = Integer.valueOf(sharedPreferences.getString(getString(R.string.prefs_key_incoming_call_vibrate_mode), "0"));
+		mEndCallVibrateMode = Integer.valueOf(sharedPreferences.getString(getString(R.string.prefs_key_end_call_vibrate_mode), "0"));
+//		mReminderIntervalMillis = Integer.valueOf(sharedPreferences.getString(getString(R.string.prefs_key_reminder_interval), "45")) * 1000;
+		
+		Log.d(TAG, String.format("Outgoing Call[%s], mode =  %d", String.valueOf(mListenOutgoingCall), mOutgoingCallVibrateMode));
+		Log.d(TAG, String.format("Incoming Call[%s], mode =  %d", String.valueOf(mListenIncomingCall), mIncomingCallVibrateMode));
+		Log.d(TAG, String.format("End      Call[%s], mode =  %d", String.valueOf(mListenEndCall), mEndCallVibrateMode));
+//		Log.d(TAG, String.format("Reminder   [%s], millis =  %d", String.valueOf(mReminder), mReminderIntervalMillis));
+		
+		mShowNotification = sharedPreferences.getBoolean(getString(R.string.prefs_key_show_notification), false);
+		
+		Log.d(TAG, "Show Notification = " + mShowNotification);
+		
+		if (mShowNotification) {
+			showNotification();
+		} else {
+			cancelNotification();
+		}
+		
+		return START_STICKY;
+	}
+
+	private void cancelNotification() {
+		stopForeground(true);
+	}
+
+	private void showNotification() {
 		Notification notification = new Notification(R.drawable.ic_stat, getString(R.string.stat_running), System.currentTimeMillis());
 		
 		final String on = getString(R.string.on);
@@ -181,8 +249,6 @@ public class CallStateService extends Service {
 		notification.setLatestEventInfo(this, getString(R.string.stat_running), contentText, contentIntent);
 		
 		startForeground(R.xml.prefs, notification);
-		
-		return START_STICKY;
 	}
 
 	private class OutgoingCallWorkerThread extends Thread {
@@ -259,9 +325,21 @@ public class CallStateService extends Service {
 				Log.d(TAG, "connectTime -> " + connectTime);
 
 				if (Math.abs(time - connectTime) < 100) {
-					Log.d(TAG, "************ Vibrate ***************");
-
-					vibrate(mOutgoingCallVibrateMode);
+					Log.d(TAG, "************ outgoing call in call ***************");
+					
+//					mInCall = true;
+					
+					if (mListenOutgoingCall) {
+						vibrate(mOutgoingCallVibrateMode);
+					}
+					
+//					if (mReminder) {
+//						mHandler.removeMessages(WHAT_REMINDER_VIBRATE);
+//						
+//						mHandler.sendEmptyMessageDelayed(WHAT_REMINDER_VIBRATE, mReminderIntervalMillis);
+//					}
+					
+					
 				}
 			}
 		}
@@ -272,7 +350,8 @@ public class CallStateService extends Service {
 		super.onDestroy();
 
 		Log.d(TAG, "OnDestroy");
-
+//		mHandler.removeMessages(WHAT_REMINDER_VIBRATE);
+		
 		stopWorkerThread();
 		
 		stopForeground(true);

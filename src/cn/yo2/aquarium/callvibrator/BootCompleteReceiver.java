@@ -1,6 +1,5 @@
 package cn.yo2.aquarium.callvibrator;
 
-import android.app.ActivityManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;

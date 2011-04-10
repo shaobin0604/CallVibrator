@@ -5,4 +5,10 @@
 		<item>兩次短震</item>
 		<item>壹長壹短</item>
 	</string-array>
+	
+	<string-array name="vibrate_interval_entries">
+		<item>45 秒</item>
+		<item>50 秒</item>
+		<item>55 秒</item>
+	</string-array>
 </resources>
