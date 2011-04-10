@@ -3,6 +3,9 @@ package cn.yo2.aquarium.callvibrator;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -138,6 +141,12 @@ public class CallStateService extends Service {
 		}
 
 	};
+	
+	private static final DateFormat DF = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSSZ");
+	
+	private static CharSequence formatTimeStr(long inTimeInMillis) {
+		return DF.format(new Date(inTimeInMillis));
+	}
 
 	private void startWorkerThread() {
 		stopWorkerThread();
@@ -253,6 +262,8 @@ public class CallStateService extends Service {
 
 	private class OutgoingCallWorkerThread extends Thread {
 
+		private static final int CONNECT_TIME_DELAY = 600;
+		
 		private volatile boolean mIsThreadKill;
 
 		public synchronized void requestKill() {
@@ -321,10 +332,10 @@ public class CallStateService extends Service {
 			if (matcher.find()) {
 				long connectTime = Long.valueOf(matcher.group(1));
 
-				Log.d(TAG, "time -> " + time);
-				Log.d(TAG, "connectTime -> " + connectTime);
+				Log.d(TAG, "now     time -> " + formatTimeStr(time));
+				Log.d(TAG, "connect time -> " + formatTimeStr(connectTime));
 
-				if (Math.abs(time - connectTime) < 100) {
+				if (Math.abs(time - connectTime) <= CONNECT_TIME_DELAY) {
 					Log.d(TAG, "************ outgoing call in call ***************");
 					
 //					mInCall = true;
