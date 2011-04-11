@@ -17,7 +17,7 @@
     
     <string name="prefs_category_general_settings">常规设置</string>
     <string name="prefs_title_auto_start">开机启动</string>
-    <string name="prefs_title_show_notification">状态栏图标</string>
+    <string name="prefs_title_show_notification">显示状态栏图标</string>
     
     <string name="prefs_category_info">信息</string>
     

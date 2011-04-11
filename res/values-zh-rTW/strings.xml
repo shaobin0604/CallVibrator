@@ -17,7 +17,7 @@
     
     <string name="prefs_category_general_settings">常規設置</string>
     <string name="prefs_title_auto_start">開機啟動</string>
-    <string name="prefs_title_show_notification">狀態欄圖標</string>
+    <string name="prefs_title_show_notification">顯示狀態欄圖標</string>
     
     <string name="prefs_category_info">信息</string>
     

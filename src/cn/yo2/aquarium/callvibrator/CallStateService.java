@@ -279,11 +279,6 @@ public class CallStateService extends Service {
 			BufferedReader reader = null;
 			try {
 				Runtime runtime = Runtime.getRuntime();
-			
-				// TODO: not good, try another method
-				// clean log
-				// runtime.exec("/system/bin/logcat -c -b radio");
-			
 				// run logcat
 				process = runtime.exec("/system/bin/logcat -b radio -s GSM:D");
 			
