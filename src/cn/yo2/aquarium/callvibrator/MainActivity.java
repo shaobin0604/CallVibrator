@@ -30,14 +30,14 @@ public class MainActivity extends PreferenceActivity implements OnPreferenceChan
 	private CheckBoxPreference mOutgoingCallPrefs;
 	private CheckBoxPreference mIncomingCallPrefs;
 	private CheckBoxPreference mEndCallPrefs;
-//	private CheckBoxPreference mReminderPrefs;
+	private CheckBoxPreference mReminderPrefs;
 	
 	private CheckBoxPreference mShowNotificationPres;
 	
 	private ListPreference mOutgoingCallVibrateMode;
 	private ListPreference mIncomingCallVibrateMode;
 	private ListPreference mEndCallVibrateMode;
-//	private ListPreference mReminderInterval;
+	private ListPreference mReminderInterval;
 	
 	private Preference mAboutPrefs;
 	
@@ -76,8 +76,8 @@ public class MainActivity extends PreferenceActivity implements OnPreferenceChan
         mEndCallPrefs = (CheckBoxPreference) findPreference(getString(R.string.prefs_key_end_call));
         mEndCallPrefs.setOnPreferenceChangeListener(this);
         
-//        mReminderPrefs = (CheckBoxPreference) findPreference(getString(R.string.prefs_key_reminder));
-//        mReminderPrefs.setOnPreferenceChangeListener(this);
+        mReminderPrefs = (CheckBoxPreference) findPreference(getString(R.string.prefs_key_reminder));
+        mReminderPrefs.setOnPreferenceChangeListener(this);
         
         mOutgoingCallVibrateMode = (ListPreference) findPreference(getString(R.string.prefs_key_outgoing_call_vibrate_mode));
         mOutgoingCallVibrateMode.setOnPreferenceChangeListener(this);
@@ -88,8 +88,8 @@ public class MainActivity extends PreferenceActivity implements OnPreferenceChan
         mEndCallVibrateMode = (ListPreference) findPreference(getString(R.string.prefs_key_end_call_vibrate_mode));
         mEndCallVibrateMode.setOnPreferenceChangeListener(this);
         
-//        mReminderInterval = (ListPreference) findPreference(getString(R.string.prefs_key_reminder_interval));
-//        mReminderInterval.setOnPreferenceChangeListener(this);
+        mReminderInterval = (ListPreference) findPreference(getString(R.string.prefs_key_reminder_interval));
+        mReminderInterval.setOnPreferenceChangeListener(this);
         
         mShowNotificationPres = (CheckBoxPreference) findPreference(getString(R.string.prefs_key_show_notification));
         mShowNotificationPres.setOnPreferenceChangeListener(this);
@@ -98,9 +98,6 @@ public class MainActivity extends PreferenceActivity implements OnPreferenceChan
         mVersionName = getString(R.string.prefs_summary_about, mAppVersionName);
 		mAboutPrefs.setSummary(mVersionName);
 		mAboutPrefs.setOnPreferenceClickListener(this);
-		
-        
-        
 		
         Intent intent = new Intent(this, CallStateService.class);
         startService(intent);
@@ -153,6 +150,7 @@ public class MainActivity extends PreferenceActivity implements OnPreferenceChan
     	updatePreferenceSummary(mOutgoingCallVibrateMode, mSharedPreferences.getString(getString(R.string.prefs_key_outgoing_call_vibrate_mode), "0"));
 		updatePreferenceSummary(mIncomingCallVibrateMode, mSharedPreferences.getString(getString(R.string.prefs_key_incoming_call_vibrate_mode), "0"));
 		updatePreferenceSummary(mEndCallVibrateMode, mSharedPreferences.getString(getString(R.string.prefs_key_end_call_vibrate_mode), "0"));
+		updatePreferenceSummary(mReminderInterval, mSharedPreferences.getString(getString(R.string.prefs_key_reminder_interval), "45"));
 		
 		mSharedPreferences.registerOnSharedPreferenceChangeListener(this);
     }
@@ -182,7 +180,9 @@ public class MainActivity extends PreferenceActivity implements OnPreferenceChan
 			updatePreferenceSummary(mIncomingCallVibrateMode, mSharedPreferences.getString(key, "0"));
 		} else if (getString(R.string.prefs_key_end_call_vibrate_mode).equals(key)) {
 			updatePreferenceSummary(mEndCallVibrateMode, mSharedPreferences.getString(key, "0"));
-		} 
+		} else if (getString(R.string.prefs_key_reminder_interval).equals(key)) {
+			updatePreferenceSummary(mReminderInterval, mSharedPreferences.getString(key, "45"));
+		}
 	}
 
 	private void updatePreferenceSummary(ListPreference preference, String value) {
@@ -204,9 +204,9 @@ public class MainActivity extends PreferenceActivity implements OnPreferenceChan
 				preference == mOutgoingCallVibrateMode ||
 				preference == mIncomingCallVibrateMode ||
 				preference == mEndCallVibrateMode ||
-				preference == mShowNotificationPres /*||
+				preference == mShowNotificationPres ||
 				preference == mReminderPrefs ||
-				preference == mReminderInterval */) {
+				preference == mReminderInterval ) {
 			
 			Intent intent = new Intent(this, CallStateService.class);
 	        startService(intent);

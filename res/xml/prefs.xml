@@ -49,7 +49,7 @@
   		 	android:dependency="@string/prefs_key_end_call"/>
   	</PreferenceCategory>
   	
-  	<!-- 
+
   	
   	<PreferenceCategory android:title="@string/prefs_category_reminder_settings">
   		<CheckBoxPreference android:title="@string/prefs_title_reminder"
@@ -65,10 +65,7 @@
 	  		android:entryValues="@array/vibrate_interval_entry_values"
 	  		android:defaultValue="45"
 	  		android:dependency="@string/prefs_key_reminder"/>
-  		
   	</PreferenceCategory>
-  	
-  	 -->
   	
   	<PreferenceCategory android:title="@string/prefs_category_general_settings">
   		
