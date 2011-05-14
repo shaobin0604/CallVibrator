@@ -25,14 +25,9 @@ import android.text.TextUtils;
 import android.util.Log;
 
 public class CallStateService extends Service {
-	private static final int ONE_MINUTE_IN_MILLIS = 60 * 1000;
-
 	private static final String TAG = CallStateService.class.getSimpleName();
 	
-	private static final int VIBRATE_MODE_SHORT = 50;
-	private static final long[] VIBRATE_MODE_SHORT_SHORT = {0, 50, 400, 50 };
-	private static final long[] VIBRATE_MODE_LONG_SHORT = {0, 200, 400, 50};
-	
+	private static final int ONE_MINUTE_IN_MILLIS = 60 * 1000;
 	
 	private TelephonyManager mTelephonyManager;
 	private int mLastCallState;
@@ -52,10 +47,8 @@ public class CallStateService extends Service {
 	private boolean mListenOutgoingCall;
 	private boolean mListenIncomingCall;
 	private boolean mListenEndCall;
-	
-	private int mOutgoingCallVibrateMode;
-	private int mIncomingCallVibrateMode;
-	private int mEndCallVibrateMode;
+
+	private long mVibrateTime;
 	
 	private static final int WHAT_REMINDER_VIBRATE = 1;
 	private static final int WHAT_REMINDER_ONE_MINUTE = 2;
@@ -106,7 +99,7 @@ public class CallStateService extends Service {
 					if (mLastCallState == TelephonyManager.CALL_STATE_OFFHOOK || mLastCallState == TelephonyManager.CALL_STATE_RINGING) {
 						Log.d(TAG, "[onCallStateChanged] Call End, vibrate");
 						
-						vibrate(mEndCallVibrateMode);
+						mVibrator.vibrate(mVibrateTime);
 					}
 				}
 				
@@ -128,7 +121,7 @@ public class CallStateService extends Service {
 					mInCall = true;
 					if (mListenIncomingCall) {
 						Log.d(TAG, "[onCallStateChanged] incoming Call answered, vibrate");
-						vibrate(mIncomingCallVibrateMode);
+						mVibrator.vibrate(mVibrateTime);
 					}
 					
 					if (mReminder) {
@@ -230,15 +223,11 @@ public class CallStateService extends Service {
 			return START_STICKY;
 		}
 		
-		mOutgoingCallVibrateMode = Integer.valueOf(sharedPreferences.getString(getString(R.string.prefs_key_outgoing_call_vibrate_mode), "0"));
-		mIncomingCallVibrateMode = Integer.valueOf(sharedPreferences.getString(getString(R.string.prefs_key_incoming_call_vibrate_mode), "0"));
-		mEndCallVibrateMode = Integer.valueOf(sharedPreferences.getString(getString(R.string.prefs_key_end_call_vibrate_mode), "0"));
-		mReminderIntervalMillis = Integer.valueOf(sharedPreferences.getString(getString(R.string.prefs_key_reminder_interval), "45")) * 1000;
+		mVibrateTime = Integer.valueOf(sharedPreferences.getString(getString(R.string.prefs_key_vibrate_time), "80"));
+		Log.d(TAG, String.format("Vibrate Time =  %d ms", mVibrateTime));
 		
-		Log.d(TAG, String.format("Outgoing Call[%s], mode =  %d", String.valueOf(mListenOutgoingCall), mOutgoingCallVibrateMode));
-		Log.d(TAG, String.format("Incoming Call[%s], mode =  %d", String.valueOf(mListenIncomingCall), mIncomingCallVibrateMode));
-		Log.d(TAG, String.format("End      Call[%s], mode =  %d", String.valueOf(mListenEndCall), mEndCallVibrateMode));
-		Log.d(TAG, String.format("Reminder   [%s], millis =  %d", String.valueOf(mReminder), mReminderIntervalMillis));
+		mReminderIntervalMillis = Integer.valueOf(sharedPreferences.getString(getString(R.string.prefs_key_reminder_interval), "45")) * 1000;
+		Log.d(TAG, String.format("Reminder[%s], millis =  %d", String.valueOf(mReminder), mReminderIntervalMillis));
 		
 		mShowNotification = sharedPreferences.getBoolean(getString(R.string.prefs_key_show_notification), false);
 		
@@ -351,7 +340,7 @@ public class CallStateService extends Service {
 					mInCall = true;
 					
 					if (mListenOutgoingCall) {
-						vibrate(mOutgoingCallVibrateMode);
+						mVibrator.vibrate(mVibrateTime);
 					}
 					
 					if (mReminder) {
@@ -385,20 +374,5 @@ public class CallStateService extends Service {
 		stopForeground(true);
 
 		mTelephonyManager.listen(mListener, PhoneStateListener.LISTEN_NONE);
-	}
-
-	private void vibrate(int mode) {
-		switch (mode) {
-		case 1:
-			mVibrator.vibrate(VIBRATE_MODE_SHORT_SHORT, -1);
-			break;
-		case 2:
-			mVibrator.vibrate(VIBRATE_MODE_LONG_SHORT, -1);
-			break;
-		default:
-			mVibrator.vibrate(VIBRATE_MODE_SHORT);
-			break;
-		}
-		
 	}
 }

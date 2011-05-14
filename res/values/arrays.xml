@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-	<string-array name="vibrate_mode_entries">
-		<item>Short</item>
-		<item>Short + Short</item>
-		<item>Long + Short</item>
+	<string-array name="vibrate_time_entries">
+		<item>Weak(40 ms)</item>
+		<item>Medium(80 ms)</item>
+		<item>Strong(120 ms)</item>
 	</string-array>
 	
-	<string-array name="vibrate_mode_entry_values">
-		<item>0</item>
-		<item>1</item>
-		<item>2</item>
+	<string-array name="vibrate_time_entry_values">
+		<item>40</item>
+		<item>80</item>
+		<item>120</item>
 	</string-array>
 	
 	<string-array name="vibrate_interval_entries">

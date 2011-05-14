@@ -2,14 +2,11 @@
 <resources>
     <string name="app_name">通話震動</string>
     
-    <string name="prefs_category_outgoing_call_settings">去電接通震動</string>
-    <string name="prefs_title_outgoing_call">撥出通話接通時震動</string>
+    <string name="prefs_title_outgoing_call">去電接通震動</string>
     
-    <string name="prefs_category_incoming_call_settings">來電接通震動</string>
-    <string name="prefs_title_incoming_call">呼入通話接通時震動</string>
+    <string name="prefs_title_incoming_call">來電接通震動</string>
     
-    <string name="prefs_category_end_call_settings">通話掛斷震動</string>
-    <string name="prefs_title_end_call">通話掛斷時震動</string>
+    <string name="prefs_title_end_call">通話掛斷震動</string>
     
     <string name="prefs_category_reminder_settings">通話期間震動</string>
     <string name="prefs_title_reminder">每隔指定的時間震動</string>
@@ -34,7 +31,7 @@
     <string name="stat_running">通話震動正在運行中</string>
     <string name="content_text">去電: %1$s, 來電: %2$s, 掛斷: %3$s</string>
     
-    <string name="prefs_title_vibrate_mode">震動模式</string>
+    <string name="prefs_title_vibrate_time">震動強度</string>
     
     <string name="on">開啟</string>
     <string name="off">關閉</string>

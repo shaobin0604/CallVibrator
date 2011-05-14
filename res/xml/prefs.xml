@@ -1,74 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen
   xmlns:android="http://schemas.android.com/apk/res/android">
-  	<PreferenceCategory android:title="@string/prefs_category_outgoing_call_settings">
-  		<CheckBoxPreference android:title="@string/prefs_title_outgoing_call"
-  			android:key="@string/prefs_key_outgoing_call"
-  			android:defaultValue="false"
-  			android:summaryOn="@string/on"
-  			android:summaryOff="@string/off"/>
-  			
-  		 <ListPreference android:title="@string/prefs_title_vibrate_mode"
-  		 	android:key="@string/prefs_key_outgoing_call_vibrate_mode"
-  		 	android:dialogTitle="@string/prefs_title_vibrate_mode"
-  		 	android:entries="@array/vibrate_mode_entries"
-  		 	android:entryValues="@array/vibrate_mode_entry_values"
-  		 	android:defaultValue="0"
-  		 	android:dependency="@string/prefs_key_outgoing_call"/>
-  		 	
-  	</PreferenceCategory>
+  	<CheckBoxPreference android:title="@string/prefs_title_outgoing_call"
+  		android:key="@string/prefs_key_outgoing_call"
+  		android:defaultValue="false"
+  		android:summaryOn="@string/on"
+  		android:summaryOff="@string/off"/>
   	
-  	<PreferenceCategory android:title="@string/prefs_category_incoming_call_settings">
-  		<CheckBoxPreference android:title="@string/prefs_title_incoming_call"
-  			android:key="@string/prefs_key_incoming_call"
-  			android:defaultValue="false"
-  			android:summaryOn="@string/on"
-  			android:summaryOff="@string/off"/>
-  		<ListPreference android:title="@string/prefs_title_vibrate_mode"
-  		 	android:key="@string/prefs_key_incoming_call_vibrate_mode"
-  		 	android:dialogTitle="@string/prefs_title_vibrate_mode"
-  		 	android:entries="@array/vibrate_mode_entries"
-  		 	android:entryValues="@array/vibrate_mode_entry_values"
-  		 	android:defaultValue="0"
-  		 	android:dependency="@string/prefs_key_incoming_call"/>
-  	</PreferenceCategory>
+  	<CheckBoxPreference android:title="@string/prefs_title_incoming_call"
+  		android:key="@string/prefs_key_incoming_call"
+  		android:defaultValue="false"
+  		android:summaryOn="@string/on"
+  		android:summaryOff="@string/off"/>
   	
-  	
-  	<PreferenceCategory android:title="@string/prefs_category_end_call_settings">
-  		<CheckBoxPreference android:title="@string/prefs_title_end_call"
-  			android:key="@string/prefs_key_end_call"
-  			android:defaultValue="false"
-  			android:summaryOn="@string/on"
-  			android:summaryOff="@string/off"/>
-  		<ListPreference android:title="@string/prefs_title_vibrate_mode"
-  		 	android:key="@string/prefs_key_end_call_vibrate_mode"
-  		 	android:dialogTitle="@string/prefs_title_vibrate_mode"
-  		 	android:entries="@array/vibrate_mode_entries"
-  		 	android:entryValues="@array/vibrate_mode_entry_values"
-  		 	android:defaultValue="0"
-  		 	android:dependency="@string/prefs_key_end_call"/>
-  	</PreferenceCategory>
-  	
-
-  	
+  	<CheckBoxPreference android:title="@string/prefs_title_end_call"
+  		android:key="@string/prefs_key_end_call"
+  		android:defaultValue="false"
+  		android:summaryOn="@string/on"
+  		android:summaryOff="@string/off"/>
   	<PreferenceCategory android:title="@string/prefs_category_reminder_settings">
-  		<CheckBoxPreference android:title="@string/prefs_title_reminder"
-  			android:key="@string/prefs_key_reminder"
-  			android:defaultValue="false"
-  			android:summaryOn="@string/on"
-  			android:summaryOff="@string/off"/>
-  	
-	  	<ListPreference android:key="@string/prefs_key_reminder_interval"
-	  		android:title="@string/prefs_title_reminder_interval"
-	  		android:dialogTitle="@string/prefs_title_reminder_interval"
-	  		android:entries="@array/vibrate_interval_entries"
-	  		android:entryValues="@array/vibrate_interval_entry_values"
-	  		android:defaultValue="45"
-	  		android:dependency="@string/prefs_key_reminder"/>
-  	</PreferenceCategory>
-  	
-  	<PreferenceCategory android:title="@string/prefs_category_general_settings">
   		
+  	<CheckBoxPreference android:title="@string/prefs_title_reminder"
+  		android:key="@string/prefs_key_reminder"
+  		android:defaultValue="false"
+  		android:summaryOn="@string/on"
+  		android:summaryOff="@string/off"/>
+  	 <ListPreference android:key="@string/prefs_key_reminder_interval"
+		android:title="@string/prefs_title_reminder_interval"
+		android:dialogTitle="@string/prefs_title_reminder_interval"
+		android:entries="@array/vibrate_interval_entries"
+		android:entryValues="@array/vibrate_interval_entry_values"
+		android:defaultValue="45"
+		android:dependency="@string/prefs_key_reminder"/>
+	</PreferenceCategory>
+	
+
+  	<PreferenceCategory android:title="@string/prefs_category_general_settings">
+  		<ListPreference android:title="@string/prefs_title_vibrate_time"
+			android:key="@string/prefs_key_vibrate_time"
+			android:defaultValue="80"
+			android:entries="@array/vibrate_time_entries"
+			android:entryValues="@array/vibrate_time_entry_values"/>
+		
   		<CheckBoxPreference android:title="@string/prefs_title_auto_start"
   			android:key="@string/prefs_key_auto_start"
   			android:defaultValue="false"

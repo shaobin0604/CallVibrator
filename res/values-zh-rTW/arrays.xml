@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-	<string-array name="vibrate_mode_entries">
-		<item>壹次短震</item>
-		<item>兩次短震</item>
-		<item>壹長壹短</item>
+	<string-array name="vibrate_time_entries">
+		<item>弱(40 ms)</item>
+		<item>中(80 ms)</item>
+		<item>強(120 ms)</item>
 	</string-array>
 	
 	<string-array name="vibrate_interval_entries">

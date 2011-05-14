@@ -2,15 +2,12 @@
 <resources>
     <string name="app_name">Call Vibrator</string>
     
-    <string name="prefs_category_outgoing_call_settings">Outgoing Call</string>
     <string name="prefs_title_outgoing_call">Vibrate when connected</string>
     <string name="prefs_key_outgoing_call">prefs_key_outgoing_call</string>
     
-    <string name="prefs_category_incoming_call_settings">Incoming Call</string>
     <string name="prefs_title_incoming_call">Vibrate when connected</string>
     <string name="prefs_key_incoming_call">prefs_key_incoming_call</string>
     
-    <string name="prefs_category_end_call_settings">End Call</string>
     <string name="prefs_title_end_call">Vibrate when call end</string>
     <string name="prefs_key_end_call">prefs_key_end_call</string>
     
@@ -44,10 +41,8 @@
     <string name="stat_running">Call Vibrator is running</string>
     <string name="content_text">Outgoing: %1$s, Incoming: %2$s, End: %3$s</string>
     
-    <string name="prefs_title_vibrate_mode">Vibrate Mode</string>
-    <string name="prefs_key_outgoing_call_vibrate_mode">prefs_key_outgoing_call_vibrate_mode</string>
-    <string name="prefs_key_incoming_call_vibrate_mode">prefs_key_incoming_call_vibrate_mode</string>
-    <string name="prefs_key_end_call_vibrate_mode">prefs_key_end_call_vibrate_mode</string>
+    <string name="prefs_title_vibrate_time">Vibrate Time</string>
+    <string name="prefs_key_vibrate_time">prefs_key_vibrate_time</string>
     
     <string name="on">On</string>
     <string name="off">Off</string>

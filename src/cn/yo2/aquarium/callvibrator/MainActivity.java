@@ -34,9 +34,7 @@ public class MainActivity extends PreferenceActivity implements OnPreferenceChan
 	
 	private CheckBoxPreference mShowNotificationPres;
 	
-	private ListPreference mOutgoingCallVibrateMode;
-	private ListPreference mIncomingCallVibrateMode;
-	private ListPreference mEndCallVibrateMode;
+	private ListPreference mVibrateTime;
 	private ListPreference mReminderInterval;
 	
 	private Preference mAboutPrefs;
@@ -79,14 +77,8 @@ public class MainActivity extends PreferenceActivity implements OnPreferenceChan
         mReminderPrefs = (CheckBoxPreference) findPreference(getString(R.string.prefs_key_reminder));
         mReminderPrefs.setOnPreferenceChangeListener(this);
         
-        mOutgoingCallVibrateMode = (ListPreference) findPreference(getString(R.string.prefs_key_outgoing_call_vibrate_mode));
-        mOutgoingCallVibrateMode.setOnPreferenceChangeListener(this);
-        
-        mIncomingCallVibrateMode = (ListPreference) findPreference(getString(R.string.prefs_key_incoming_call_vibrate_mode));
-        mIncomingCallVibrateMode.setOnPreferenceChangeListener(this);
-        
-        mEndCallVibrateMode = (ListPreference) findPreference(getString(R.string.prefs_key_end_call_vibrate_mode));
-        mEndCallVibrateMode.setOnPreferenceChangeListener(this);
+        mVibrateTime = (ListPreference) findPreference(getString(R.string.prefs_key_vibrate_time));
+        mVibrateTime.setOnPreferenceChangeListener(this);
         
         mReminderInterval = (ListPreference) findPreference(getString(R.string.prefs_key_reminder_interval));
         mReminderInterval.setOnPreferenceChangeListener(this);
@@ -147,9 +139,7 @@ public class MainActivity extends PreferenceActivity implements OnPreferenceChan
     protected void onResume() {
     	super.onResume();
 
-    	updatePreferenceSummary(mOutgoingCallVibrateMode, mSharedPreferences.getString(getString(R.string.prefs_key_outgoing_call_vibrate_mode), "0"));
-		updatePreferenceSummary(mIncomingCallVibrateMode, mSharedPreferences.getString(getString(R.string.prefs_key_incoming_call_vibrate_mode), "0"));
-		updatePreferenceSummary(mEndCallVibrateMode, mSharedPreferences.getString(getString(R.string.prefs_key_end_call_vibrate_mode), "0"));
+		updatePreferenceSummary(mVibrateTime, mSharedPreferences.getString(getString(R.string.prefs_key_vibrate_time), "80"));
 		updatePreferenceSummary(mReminderInterval, mSharedPreferences.getString(getString(R.string.prefs_key_reminder_interval), "45"));
 		
 		mSharedPreferences.registerOnSharedPreferenceChangeListener(this);
@@ -174,12 +164,8 @@ public class MainActivity extends PreferenceActivity implements OnPreferenceChan
 
 	public void onSharedPreferenceChanged(SharedPreferences sharedPreferences,
 			String key) {
-		if (getString(R.string.prefs_key_outgoing_call_vibrate_mode).equals(key)) {
-			updatePreferenceSummary(mOutgoingCallVibrateMode, mSharedPreferences.getString(key, "0"));
-		} else if (getString(R.string.prefs_key_incoming_call_vibrate_mode).equals(key)) {
-			updatePreferenceSummary(mIncomingCallVibrateMode, mSharedPreferences.getString(key, "0"));
-		} else if (getString(R.string.prefs_key_end_call_vibrate_mode).equals(key)) {
-			updatePreferenceSummary(mEndCallVibrateMode, mSharedPreferences.getString(key, "0"));
+		if (getString(R.string.prefs_key_vibrate_time).equals(key)) {
+			updatePreferenceSummary(mVibrateTime, mSharedPreferences.getString(key, "80"));
 		} else if (getString(R.string.prefs_key_reminder_interval).equals(key)) {
 			updatePreferenceSummary(mReminderInterval, mSharedPreferences.getString(key, "45"));
 		}
@@ -201,9 +187,7 @@ public class MainActivity extends PreferenceActivity implements OnPreferenceChan
 		if (preference == mOutgoingCallPrefs ||
 				preference == mIncomingCallPrefs ||
 				preference == mEndCallPrefs ||
-				preference == mOutgoingCallVibrateMode ||
-				preference == mIncomingCallVibrateMode ||
-				preference == mEndCallVibrateMode ||
+				preference == mVibrateTime ||
 				preference == mShowNotificationPres ||
 				preference == mReminderPrefs ||
 				preference == mReminderInterval ) {
