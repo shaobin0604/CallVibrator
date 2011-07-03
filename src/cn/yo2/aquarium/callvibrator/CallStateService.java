@@ -51,28 +51,21 @@ public class CallStateService extends Service {
 	private long mVibrateTime;
 	
 	private static final int WHAT_REMINDER_VIBRATE = 1;
-	private static final int WHAT_REMINDER_ONE_MINUTE = 2;
 	
 	private Handler mHandler = new Handler() {
 
 		@Override
 		public void handleMessage(Message msg) {
 			switch (msg.what) {
-			case WHAT_REMINDER_VIBRATE:
+			case WHAT_REMINDER_VIBRATE: {
 				if (mReminder && mInCall) {
 					Log.d(TAG, "one minute plus interval time out, vibrate");
-					mVibrator.vibrate(80);
+					mVibrator.vibrate(mVibrateTime);
+					Log.d(TAG, "wait 1 minute for next vibrate");
+					this.sendEmptyMessageDelayed(WHAT_REMINDER_VIBRATE, ONE_MINUTE_IN_MILLIS);
 				}
 				break;
-			case WHAT_REMINDER_ONE_MINUTE:
-				if (mReminder && mInCall) {
-					Log.d(TAG, "one minute time out, send interval time out delayed " + mReminderIntervalMillis + " millis");
-					this.sendEmptyMessageDelayed(WHAT_REMINDER_VIBRATE, mReminderIntervalMillis);
-					
-					Log.d(TAG, "one minute time out, send one minute time out delayed");
-					this.sendEmptyMessageDelayed(WHAT_REMINDER_ONE_MINUTE, ONE_MINUTE_IN_MILLIS);
-				}
-				break;
+			}
 			default:
 				break;
 			}
@@ -87,13 +80,12 @@ public class CallStateService extends Service {
 			mLastCallState = mCurrCallState;
 			mCurrCallState = state;
 			switch (state) {
-			case TelephonyManager.CALL_STATE_IDLE:
+			case TelephonyManager.CALL_STATE_IDLE: {
 				Log.d(TAG, "[onCallStateChanged] TelephonyManager.CALL_STATE_IDLE -> "
 						+ incomingNumber);
 				
 				mInCall = false;
 				mHandler.removeMessages(WHAT_REMINDER_VIBRATE);
-				mHandler.removeMessages(WHAT_REMINDER_ONE_MINUTE);
 				
 				if (mListenEndCall) {
 					if (mLastCallState == TelephonyManager.CALL_STATE_OFFHOOK || mLastCallState == TelephonyManager.CALL_STATE_RINGING) {
@@ -106,7 +98,8 @@ public class CallStateService extends Service {
 				stopWorkerThread();
 				
 				break;
-			case TelephonyManager.CALL_STATE_OFFHOOK:
+			}
+			case TelephonyManager.CALL_STATE_OFFHOOK: {
 				Log.d(TAG, "TelephonyManager.CALL_STATE_OFFHOOK -> "
 						+ incomingNumber);
 
@@ -124,25 +117,20 @@ public class CallStateService extends Service {
 						mVibrator.vibrate(mVibrateTime);
 					}
 					
-					if (mReminder) {
-						Log.d(TAG, "[incoming call in call] --> send vibrate interval delayed " + mReminderIntervalMillis + " millis");
-						
-						mHandler.removeMessages(WHAT_REMINDER_VIBRATE);
-						mHandler.sendEmptyMessageDelayed(WHAT_REMINDER_VIBRATE, mReminderIntervalMillis);
-						
-						Log.d(TAG, "[incoming call in call] --> send one minute delayed");
-						
-						mHandler.removeMessages(WHAT_REMINDER_ONE_MINUTE);
-						mHandler.sendEmptyMessageDelayed(WHAT_REMINDER_ONE_MINUTE, ONE_MINUTE_IN_MILLIS);
-					}
 				}
 				break;
-			case TelephonyManager.CALL_STATE_RINGING:
-				
+			}
+			case TelephonyManager.CALL_STATE_RINGING: {
 				Log.d(TAG, "[onCallStateChanged] TelephonyManager.CALL_STATE_RINGING -> "
 						+ incomingNumber);
+				if (mLastCallState == TelephonyManager.CALL_STATE_IDLE) {
+					Log.d(TAG, "[onCallStateChanged] call state from idle to ringing");
+				} else if (mLastCallState == TelephonyManager.CALL_STATE_OFFHOOK) {
+					Log.d(TAG, "[onCallStateChanged] call state from offhook to ringing");
+				}
+				
 				break;
-
+			}
 			default:
 				break;
 			}
@@ -348,11 +336,6 @@ public class CallStateService extends Service {
 						
 						mHandler.removeMessages(WHAT_REMINDER_VIBRATE);
 						mHandler.sendEmptyMessageDelayed(WHAT_REMINDER_VIBRATE, mReminderIntervalMillis);
-						
-						Log.d(TAG, "[outgoing call in call] --> send one minute delayed");
-						
-						mHandler.removeMessages(WHAT_REMINDER_ONE_MINUTE);
-						mHandler.sendEmptyMessageDelayed(WHAT_REMINDER_ONE_MINUTE, ONE_MINUTE_IN_MILLIS);
 					}
 					
 					
@@ -367,7 +350,6 @@ public class CallStateService extends Service {
 
 		Log.d(TAG, "OnDestroy");
 		mHandler.removeMessages(WHAT_REMINDER_VIBRATE);
-		mHandler.removeMessages(WHAT_REMINDER_ONE_MINUTE);
 		
 		stopWorkerThread();
 		

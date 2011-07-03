@@ -3,14 +3,10 @@
     <string name="app_name">通话震动</string>
     
     <string name="prefs_title_outgoing_call">去电接通震动</string>
-    
     <string name="prefs_title_incoming_call">来电接通震动</string>
-    
     <string name="prefs_title_end_call">通话挂断震动</string>
-    
-    <string name="prefs_category_reminder_settings">通话期间震动</string>
-    <string name="prefs_title_reminder">每隔指定的时间震动</string>
-    <string name="prefs_title_reminder_interval">时间间隔</string>
+    <string name="prefs_title_reminder">呼出通话时长提醒</string>
+    <string name="prefs_title_reminder_interval">提醒时间</string>
     
     <string name="prefs_category_general_settings">常规设置</string>
     <string name="prefs_title_auto_start">开机启动</string>

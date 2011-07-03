@@ -2,13 +2,13 @@
 <resources>
     <string name="app_name">Call Vibrator</string>
     
-    <string name="prefs_title_outgoing_call">Vibrate when connected</string>
+    <string name="prefs_title_outgoing_call">Outgoing Call vibrate</string>
     <string name="prefs_key_outgoing_call">prefs_key_outgoing_call</string>
     
-    <string name="prefs_title_incoming_call">Vibrate when connected</string>
+    <string name="prefs_title_incoming_call">Incoming Call vibrate</string>
     <string name="prefs_key_incoming_call">prefs_key_incoming_call</string>
     
-    <string name="prefs_title_end_call">Vibrate when call end</string>
+    <string name="prefs_title_end_call">End Call vibrate</string>
     <string name="prefs_key_end_call">prefs_key_end_call</string>
     
     <string name="prefs_category_general_settings">General Settings</string>
@@ -18,11 +18,10 @@
     <string name="prefs_title_show_notification">Show in status bar</string>
     <string name="prefs_key_show_notification">prefs_key_show_notification</string>
     
-    <string name="prefs_category_reminder_settings">Calling Vibrate Settings</string>
     <string name="prefs_key_reminder">prefs_key_reminder</string>
-    <string name="prefs_title_reminder">Calling vibrate alert</string>
+    <string name="prefs_title_reminder">Outgoing Call Time Alert</string>
     <string name="prefs_key_reminder_interval">prefs_key_reminder_interval</string>
-    <string name="prefs_title_reminder_interval">Alert interval</string>
+    <string name="prefs_title_reminder_interval">Alert Time</string>
     
     <string name="prefs_category_info">Information</string>
     <string name="prefs_key_about">prefs_key_about</string>
