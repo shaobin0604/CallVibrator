@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen
   xmlns:android="http://schemas.android.com/apk/res/android">
+  
   	<CheckBoxPreference android:title="@string/prefs_title_outgoing_call"
   		android:key="@string/prefs_key_outgoing_call"
   		android:defaultValue="false"
@@ -34,11 +35,12 @@
 		android:dependency="@string/prefs_key_reminder"/>
 
   	<PreferenceCategory android:title="@string/prefs_category_general_settings">
-  		<ListPreference android:title="@string/prefs_title_vibrate_time"
+		
+		<com.hlidskialf.android.preference.SeekBarPreference 
 			android:key="@string/prefs_key_vibrate_time"
-			android:defaultValue="80"
-			android:entries="@array/vibrate_time_entries"
-			android:entryValues="@array/vibrate_time_entry_values"/>
+	        android:title="@string/prefs_title_vibrate_time"
+	        android:defaultValue="80"
+	        android:max="240"/>
 		
   		<CheckBoxPreference android:title="@string/prefs_title_auto_start"
   			android:key="@string/prefs_key_auto_start"

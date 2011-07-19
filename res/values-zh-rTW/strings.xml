@@ -28,7 +28,7 @@
     <string name="content_text">去電: %1$s, 來電: %2$s, 掛斷: %3$s</string>
     
     <string name="prefs_title_vibrate_time">震動強度</string>
-    
+    <string name="text_ms"> 毫秒</string>
     <string name="on">開啟</string>
     <string name="off">關閉</string>
 </resources>

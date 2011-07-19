@@ -42,7 +42,9 @@
     
     <string name="prefs_title_vibrate_time">Vibrate Time</string>
     <string name="prefs_key_vibrate_time">prefs_key_vibrate_time</string>
-    
+    <string name="text_ms"> ms</string>
     <string name="on">On</string>
     <string name="off">Off</string>
+    
+    
 </resources>

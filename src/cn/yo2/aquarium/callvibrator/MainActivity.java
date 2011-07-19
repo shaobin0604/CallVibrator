@@ -22,6 +22,8 @@ import android.view.LayoutInflater;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.hlidskialf.android.preference.SeekBarPreference;
+
 public class MainActivity extends PreferenceActivity implements OnPreferenceChangeListener, 
 	OnSharedPreferenceChangeListener, OnPreferenceClickListener {
 	
@@ -34,7 +36,7 @@ public class MainActivity extends PreferenceActivity implements OnPreferenceChan
 	
 	private CheckBoxPreference mShowNotificationPres;
 	
-	private ListPreference mVibrateTime;
+	private SeekBarPreference mVibrateTime;
 	private ListPreference mReminderInterval;
 	
 	private Preference mAboutPrefs;
@@ -77,7 +79,7 @@ public class MainActivity extends PreferenceActivity implements OnPreferenceChan
         mReminderPrefs = (CheckBoxPreference) findPreference(getString(R.string.prefs_key_reminder));
         mReminderPrefs.setOnPreferenceChangeListener(this);
         
-        mVibrateTime = (ListPreference) findPreference(getString(R.string.prefs_key_vibrate_time));
+        mVibrateTime = (SeekBarPreference) findPreference(getString(R.string.prefs_key_vibrate_time));
         mVibrateTime.setOnPreferenceChangeListener(this);
         
         mReminderInterval = (ListPreference) findPreference(getString(R.string.prefs_key_reminder_interval));
@@ -139,7 +141,7 @@ public class MainActivity extends PreferenceActivity implements OnPreferenceChan
     protected void onResume() {
     	super.onResume();
 
-		updatePreferenceSummary(mVibrateTime, mSharedPreferences.getString(getString(R.string.prefs_key_vibrate_time), "80"));
+		updateSeekBarPreferenceSummary(mVibrateTime, mSharedPreferences.getInt(getString(R.string.prefs_key_vibrate_time), 80));
 		updatePreferenceSummary(mReminderInterval, mSharedPreferences.getString(getString(R.string.prefs_key_reminder_interval), "45"));
 		
 		mSharedPreferences.registerOnSharedPreferenceChangeListener(this);
@@ -165,10 +167,14 @@ public class MainActivity extends PreferenceActivity implements OnPreferenceChan
 	public void onSharedPreferenceChanged(SharedPreferences sharedPreferences,
 			String key) {
 		if (getString(R.string.prefs_key_vibrate_time).equals(key)) {
-			updatePreferenceSummary(mVibrateTime, mSharedPreferences.getString(key, "80"));
+			updateSeekBarPreferenceSummary(mVibrateTime, mSharedPreferences.getInt(key, 80));
 		} else if (getString(R.string.prefs_key_reminder_interval).equals(key)) {
 			updatePreferenceSummary(mReminderInterval, mSharedPreferences.getString(key, "45"));
 		}
+	}
+	
+	private void updateSeekBarPreferenceSummary(SeekBarPreference preference, int value) {
+		preference.setSummary(value + getString(R.string.text_ms));
 	}
 
 	private void updatePreferenceSummary(ListPreference preference, String value) {

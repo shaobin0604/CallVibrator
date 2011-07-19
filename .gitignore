@@ -17,3 +17,6 @@ bin/*.ap_
 # proguard generated files
 proguard/*
 
+# Thumbs.db
+Thumbs.db
+

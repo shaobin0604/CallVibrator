@@ -28,7 +28,9 @@
     <string name="content_text">去电: %1$s, 来电: %2$s, 挂断: %3$s</string>
     
     <string name="prefs_title_vibrate_time">震动强度</string>
-    
+    <string name="text_ms"> 毫秒</string>
     <string name="on">开启</string>
     <string name="off">关闭</string>
+    
+    
 </resources>
