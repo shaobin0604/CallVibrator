@@ -29,6 +29,9 @@ public class CallStateService extends Service {
 	
 	private static final int ONE_MINUTE_IN_MILLIS = 60 * 1000;
 	
+	public static final int DEFAULT_VIBRATE_TIME = 80;
+	public static final String DEFAULT_REMINDER_TIME_STR = "45";
+	
 	private TelephonyManager mTelephonyManager;
 	private int mLastCallState;
 	private int mCurrCallState;
@@ -211,10 +214,10 @@ public class CallStateService extends Service {
 			return START_STICKY;
 		}
 		
-		mVibrateTime = Integer.valueOf(sharedPreferences.getString(getString(R.string.prefs_key_vibrate_time), "80"));
+		mVibrateTime = Integer.valueOf(sharedPreferences.getInt(getString(R.string.prefs_key_vibrate_time), DEFAULT_VIBRATE_TIME));
 		Log.d(TAG, String.format("Vibrate Time =  %d ms", mVibrateTime));
 		
-		mReminderIntervalMillis = Integer.valueOf(sharedPreferences.getString(getString(R.string.prefs_key_reminder_interval), "45")) * 1000;
+		mReminderIntervalMillis = Integer.valueOf(sharedPreferences.getString(getString(R.string.prefs_key_reminder_interval), DEFAULT_REMINDER_TIME_STR)) * 1000;
 		Log.d(TAG, String.format("Reminder[%s], millis =  %d", String.valueOf(mReminder), mReminderIntervalMillis));
 		
 		mShowNotification = sharedPreferences.getBoolean(getString(R.string.prefs_key_show_notification), false);

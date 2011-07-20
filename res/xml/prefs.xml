@@ -40,7 +40,7 @@
 			android:key="@string/prefs_key_vibrate_time"
 	        android:title="@string/prefs_title_vibrate_time"
 	        android:defaultValue="80"
-	        android:max="240"/>
+	        android:max="200"/>
 		
   		<CheckBoxPreference android:title="@string/prefs_title_auto_start"
   			android:key="@string/prefs_key_auto_start"
@@ -56,7 +56,7 @@
   	</PreferenceCategory>
   	
   	<PreferenceCategory android:title="@string/prefs_category_info">
-  		<Preference android:key="@string/prefs_key_about" 
+  		<cn.yo2.aquarium.callvibrator.AboutPreference android:key="@string/prefs_key_about" 
   			android:title="@string/prefs_title_about"
   			android:persistent="false"/>
   		<Preference android:title="@string/prefs_title_donate_author"

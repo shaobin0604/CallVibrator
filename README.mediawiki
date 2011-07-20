@@ -1,0 +1,44 @@
+== 通话震动 ==
+
+Android 平台最好的通话震动辅助软件。使用G1一年多了，CM系列的ROM自带的通话震动功能很好，但该功能是在电话应用(Phone.apk)里实现的。朋友最近买了个三星的7680，电话应用没有该功能，只好自己写一个小软件实现该功能。
+
+=== 功能简介 ===
+
+# 拔出电话接通时（对方按下接听键）震动提醒。
+# 呼入电话接通时震动提醒。
+# 电话挂断时震动提醒。
+# 呼出通话时间震动提醒。
+# 支持震动时长设置。
+# 支持是否开机启动。
+
+=== 支持的机型 ===
+
+由于 Android SDK 没有提供呼出通话 对方震铃到对方摘机 状态监听的API，本软件对拔出电话接通时（对方按下接听键）震动提醒是通过读取系统的 radio log 实现的。
+
+由于 Android 机型/ROM 众多，如果本软件在您的手机上不能正常工作，还请及时反馈。
+
+联系方式：shaobin0604@qq.com
+
+您也可以尝试如下两款软件，实现的方式应该差不多。
+
+* https://market.android.com/details?id=net.novaeye.callvibrate
+* https://market.android.com/details?id=com.James.DroidVibration
+
+目前测试有效的机型/ROM
+
+* HTC G1 Dream(rooted)/CM5.0.8 android2.1
+* Sumsang 7680(rooted)/ophone 2.0 android2.1
+* Motorola Defy
+* HUAWEI T8301/android2.2
+* K-Touch W606/android2.1
+
+=== 关于权限 ===
+
+;android.permission.READ_PHONE_STATE
+: 2.1 不需要该权限，2.2 需要，不知道为啥
+;android.permission.READ_LOGS
+: 读取系统 radio log, 实现呼出接通震动
+;android.permission.VIBRATE
+: 实现震动功能
+;android.permission.RECEIVE_BOOT_COMPLETED
+: 实现开机启动
