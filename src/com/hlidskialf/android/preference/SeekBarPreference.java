@@ -2,6 +2,8 @@
  * and is released under the APACHE 2.0 license 
  * 
  * http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Modified by shaobin0604
  */
 package com.hlidskialf.android.preference;
 
