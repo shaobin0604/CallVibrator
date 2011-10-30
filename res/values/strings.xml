@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="app_name">Call Vibrator</string>
     
     <string name="prefs_title_outgoing_call">Outgoing Call vibrate</string>
@@ -46,5 +46,19 @@
     <string name="on">On</string>
     <string name="off">Off</string>
     
+    <string name="prefs_key_collect_log">prefs_key_collect_log</string>
+    <string name="prefs_title_collect_log">Collect Log</string>
+    <string name="prefs_summary_collect_log">Send log to developer</string>
     
+    <string name="acquiring_log_progress_dialog_message">Collecting log, please wait...</string>
+    
+    <string name="msg_collect_log_success">Log saved to \n/sdcard/CallVibrator.log\nPlease send it to\nshaobin0604@qq.com</string>
+    <string name="msg_collect_log_fail">Collect log Fail!</string>
+    
+    <string name="device_info_fmt">
+CallVibrator version: <xliff:g id="application_version">%s</xliff:g>\n
+Device model: <xliff:g id="device_model">%s</xliff:g>\n
+Firmware version: <xliff:g id="firmware_revision">%s</xliff:g>\n
+Build number: <xliff:g id="build_number">%s</xliff:g>\n
+    </string>  
 </resources>

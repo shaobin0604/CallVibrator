@@ -22,11 +22,9 @@ import android.preference.PreferenceManager;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
-import android.util.Log;
+import cn.yo2.aquarium.logutils.MyLog;
 
 public class CallStateService extends Service {
-	private static final String TAG = CallStateService.class.getSimpleName();
-	
 	private static final int ONE_MINUTE_IN_MILLIS = 60 * 1000;
 	
 	public static final int DEFAULT_VIBRATE_TIME = 80;
@@ -62,9 +60,9 @@ public class CallStateService extends Service {
 			switch (msg.what) {
 			case WHAT_REMINDER_VIBRATE: {
 				if (mReminder && mInCall) {
-					Log.d(TAG, "one minute plus interval time out, vibrate");
+					MyLog.d("one minute plus interval time out, vibrate");
 					mVibrator.vibrate(mVibrateTime);
-					Log.d(TAG, "wait 1 minute for next vibrate");
+					MyLog.d("wait 1 minute for next vibrate");
 					this.sendEmptyMessageDelayed(WHAT_REMINDER_VIBRATE, ONE_MINUTE_IN_MILLIS);
 				}
 				break;
@@ -84,7 +82,7 @@ public class CallStateService extends Service {
 			mCurrCallState = state;
 			switch (state) {
 			case TelephonyManager.CALL_STATE_IDLE: {
-				Log.d(TAG, "[onCallStateChanged] TelephonyManager.CALL_STATE_IDLE -> "
+				MyLog.d("[onCallStateChanged] TelephonyManager.CALL_STATE_IDLE -> "
 						+ incomingNumber);
 				
 				mInCall = false;
@@ -92,7 +90,7 @@ public class CallStateService extends Service {
 				
 				if (mListenEndCall) {
 					if (mLastCallState == TelephonyManager.CALL_STATE_OFFHOOK || mLastCallState == TelephonyManager.CALL_STATE_RINGING) {
-						Log.d(TAG, "[onCallStateChanged] Call End, vibrate");
+						MyLog.i("[onCallStateChanged] Call End, >>>>> vibrate <<<<<");
 						
 						mVibrator.vibrate(mVibrateTime);
 					}
@@ -103,20 +101,20 @@ public class CallStateService extends Service {
 				break;
 			}
 			case TelephonyManager.CALL_STATE_OFFHOOK: {
-				Log.d(TAG, "TelephonyManager.CALL_STATE_OFFHOOK -> "
+				MyLog.d("TelephonyManager.CALL_STATE_OFFHOOK -> "
 						+ incomingNumber);
 
 				if (mLastCallState == TelephonyManager.CALL_STATE_IDLE) {
-					Log.d(TAG, "[onCallStateChanged] start outgoing call, ring");
+					MyLog.d("[onCallStateChanged] start outgoing call, ring");
 					if (mListenOutgoingCall || mReminder ) {
-						Log.d(TAG, "[onCallStateChanged] outgoing call, start worker thread");
+						MyLog.d("[onCallStateChanged] outgoing call, start worker thread");
 						startWorkerThread();
 					}
 				} else if (mLastCallState == TelephonyManager.CALL_STATE_RINGING) {
-					Log.d(TAG, "[onCallStateChanged] incoming call in call");
+					MyLog.d("[onCallStateChanged] incoming call in call");
 					mInCall = true;
 					if (mListenIncomingCall) {
-						Log.d(TAG, "[onCallStateChanged] incoming Call answered, vibrate");
+						MyLog.i("[onCallStateChanged] incoming Call answered, >>>>> vibrate <<<<<");
 						mVibrator.vibrate(mVibrateTime);
 					}
 					
@@ -124,12 +122,12 @@ public class CallStateService extends Service {
 				break;
 			}
 			case TelephonyManager.CALL_STATE_RINGING: {
-				Log.d(TAG, "[onCallStateChanged] TelephonyManager.CALL_STATE_RINGING -> "
+				MyLog.d("[onCallStateChanged] TelephonyManager.CALL_STATE_RINGING -> "
 						+ incomingNumber);
 				if (mLastCallState == TelephonyManager.CALL_STATE_IDLE) {
-					Log.d(TAG, "[onCallStateChanged] call state from idle to ringing");
+					MyLog.d("[onCallStateChanged] call state from idle to ringing");
 				} else if (mLastCallState == TelephonyManager.CALL_STATE_OFFHOOK) {
-					Log.d(TAG, "[onCallStateChanged] call state from offhook to ringing");
+					MyLog.d("[onCallStateChanged] call state from offhook to ringing");
 				}
 				
 				break;
@@ -160,12 +158,12 @@ public class CallStateService extends Service {
 			mWorkerThread.requestKill();
 			
 			try {
-				Log.d(TAG, "Before join WorkerThread");
+				MyLog.d("Before join WorkerThread");
 				mWorkerThread.join();
-				Log.d(TAG, "After join WorkerThread");
+				MyLog.d("After join WorkerThread");
 			} catch (InterruptedException e) {
 				// TODO: handle exception
-				Log.e(TAG, "mWorkerThread.join() interrupted");
+				MyLog.e("mWorkerThread.join() interrupted");
 			}
 		}
 
@@ -182,7 +180,7 @@ public class CallStateService extends Service {
 	public void onCreate() {
 		super.onCreate();
 
-		Log.d(TAG, "OnCreate");
+		MyLog.d("OnCreate");
 
 		mVibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
 
@@ -202,27 +200,27 @@ public class CallStateService extends Service {
 		
 		mReminder = sharedPreferences.getBoolean(getString(R.string.prefs_key_reminder), false);
 
-		Log.d(TAG, "Outgoing Call -> " + mListenOutgoingCall);
-		Log.d(TAG, "Incoming Call -> " + mListenIncomingCall);
-		Log.d(TAG, "End      Call -> " + mListenEndCall);
-		Log.d(TAG, "Reminder      -> " + mReminder);
+		MyLog.d("Outgoing Call -> " + mListenOutgoingCall);
+		MyLog.d("Incoming Call -> " + mListenIncomingCall);
+		MyLog.d("End      Call -> " + mListenEndCall);
+		MyLog.d("Reminder      -> " + mReminder);
 		
 		if (!mListenOutgoingCall && !mListenIncomingCall && !mListenEndCall && !mReminder ) {
-			Log.d(TAG, "Nothing to listen, stop service");
+			MyLog.d("Nothing to listen, stop service");
 			
 			stopSelf(startId);
 			return START_STICKY;
 		}
 		
 		mVibrateTime = Integer.valueOf(sharedPreferences.getInt(getString(R.string.prefs_key_vibrate_time), DEFAULT_VIBRATE_TIME));
-		Log.d(TAG, String.format("Vibrate Time =  %d ms", mVibrateTime));
+		MyLog.d(String.format("Vibrate Time =  %d ms", mVibrateTime));
 		
 		mReminderIntervalMillis = Integer.valueOf(sharedPreferences.getString(getString(R.string.prefs_key_reminder_interval), DEFAULT_REMINDER_TIME_STR)) * 1000;
-		Log.d(TAG, String.format("Reminder[%s], millis =  %d", String.valueOf(mReminder), mReminderIntervalMillis));
+		MyLog.d(String.format("Reminder[%s], millis =  %d", String.valueOf(mReminder), mReminderIntervalMillis));
 		
 		mShowNotification = sharedPreferences.getBoolean(getString(R.string.prefs_key_show_notification), false);
 		
-		Log.d(TAG, "Show Notification = " + mShowNotification);
+		MyLog.d("Show Notification = " + mShowNotification);
 		
 		if (mShowNotification) {
 			showNotification();
@@ -290,15 +288,15 @@ public class CallStateService extends Service {
 					}
 				}
 			} catch (IOException e) {
-				Log.e(TAG, "Error when execute logcat", e);
+				MyLog.e("Error when execute logcat", e);
 			} finally {
-				Log.i(TAG, "Exit close resource");
+				MyLog.d("Exit close resource");
 			
 				if (reader != null) {
 					try {
 						reader.close();
 					} catch (IOException e) {
-						Log.e(TAG, "Reader close error", e);
+						MyLog.e("Reader close error", e);
 					}
 			
 				}
@@ -310,7 +308,7 @@ public class CallStateService extends Service {
 		}
 
 		private void logLine(String line) {
-			Log.d(TAG, line);
+			MyLog.d(line);
 
 			long time = System.currentTimeMillis();
 
@@ -322,20 +320,21 @@ public class CallStateService extends Service {
 			if (matcher.find()) {
 				long connectTime = Long.valueOf(matcher.group(1));
 
-				Log.d(TAG, "now     time -> " + formatTimeStr(time));
-				Log.d(TAG, "connect time -> " + formatTimeStr(connectTime));
+				MyLog.d("now     time -> " + formatTimeStr(time));
+				MyLog.d("connect time -> " + formatTimeStr(connectTime));
 
 				if (Math.abs(time - connectTime) <= CONNECT_TIME_DELAY) {
-					Log.d(TAG, "************ outgoing call in call ***************");
+					MyLog.i(">>>>> outgoing call in call <<<<<");
 					
 					mInCall = true;
 					
 					if (mListenOutgoingCall) {
+						MyLog.i("Outgoing call in call, >>>>> Vibrate <<<<<");
 						mVibrator.vibrate(mVibrateTime);
 					}
 					
 					if (mReminder) {
-						Log.d(TAG, "[outgoing call in call] --> send vibrate interval delayed " + mReminderIntervalMillis + " millis");
+						MyLog.i("[outgoing call in call] --> send vibrate interval delayed " + mReminderIntervalMillis + " millis");
 						
 						mHandler.removeMessages(WHAT_REMINDER_VIBRATE);
 						mHandler.sendEmptyMessageDelayed(WHAT_REMINDER_VIBRATE, mReminderIntervalMillis);
@@ -351,7 +350,7 @@ public class CallStateService extends Service {
 	public void onDestroy() {
 		super.onDestroy();
 
-		Log.d(TAG, "OnDestroy");
+		MyLog.d("OnDestroy");
 		mHandler.removeMessages(WHAT_REMINDER_VIBRATE);
 		
 		stopWorkerThread();

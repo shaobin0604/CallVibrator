@@ -62,5 +62,9 @@
   		<Preference android:title="@string/prefs_title_donate_author"
   			android:persistent="false"
   			android:summary="@string/prefs_summary_donate_author"/>
+  		<Preference android:key="prefs_key_collect_log" 
+  			android:title="@string/prefs_title_collect_log"
+  			android:persistent="false"
+  			android:summary="@string/prefs_summary_collect_log"/>
   	</PreferenceCategory>
 </PreferenceScreen>

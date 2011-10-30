@@ -31,4 +31,12 @@
     <string name="text_ms"> 毫秒</string>
     <string name="on">開啟</string>
     <string name="off">關閉</string>
+    
+    <string name="prefs_title_collect_log">收集日誌</string>
+    <string name="prefs_summary_collect_log">發送日誌給開發者</string>
+    
+    <string name="acquiring_log_progress_dialog_message">正在收集日誌，請等待...</string>
+    
+    <string name="msg_collect_log_success">已保存日誌到\n/sdcard/CallVibrator.log\n請發送給\nshaobin0604@qq.com</string>
+    <string name="msg_collect_log_fail">收集日誌失敗</string>
 </resources>

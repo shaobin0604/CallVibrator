@@ -32,5 +32,11 @@
     <string name="on">开启</string>
     <string name="off">关闭</string>
     
+    <string name="prefs_title_collect_log">收集日志</string>
+    <string name="prefs_summary_collect_log">发送日志给开发者</string>
     
+    <string name="acquiring_log_progress_dialog_message">正在收集日志，请等待...</string>
+    
+    <string name="msg_collect_log_success">已保存日志到\n/sdcard/CallVibrator.log\n请发送给\nshaobin0604@qq.com</string>
+    <string name="msg_collect_log_fail">收集日志失败</string>
 </resources>
