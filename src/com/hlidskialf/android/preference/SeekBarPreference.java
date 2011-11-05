@@ -28,8 +28,7 @@ public class SeekBarPreference extends DialogPreference implements SeekBar.OnSee
 	private String mSuffix;
 	private int mDefault, mMax, mValue = 0;
 	
-	private int mUIMax, mUIValue;
-	
+	private int mUIValue;
 
 	private static final int MIN_VIBRATE_TIME = 40; // millis
 
@@ -50,19 +49,20 @@ public class SeekBarPreference extends DialogPreference implements SeekBar.OnSee
 		
 		LinearLayout layout = new LinearLayout(mContext);
 		layout.setOrientation(LinearLayout.VERTICAL);
-		layout.setPadding(6, 6, 6, 6);
+		layout.setPadding(20, 15, 20, 15);
 
 		mValueText = new TextView(mContext);
 		mValueText.setGravity(Gravity.CENTER_HORIZONTAL);
-		mValueText.setTextSize(32);
+		mValueText.setTextSize(26);
 		LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT,
 				LinearLayout.LayoutParams.WRAP_CONTENT);
 		layout.addView(mValueText, params);
 
 		mSeekBar = new SeekBar(mContext);
+		mSeekBar.setMax(getUIValue(mMax));
+		
 		mSeekBar.setOnSeekBarChangeListener(this);
-		layout.addView(mSeekBar, new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT,
-				LinearLayout.LayoutParams.WRAP_CONTENT));
+		layout.addView(mSeekBar, new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
 		
 		return layout;
 	}
@@ -78,18 +78,18 @@ public class SeekBarPreference extends DialogPreference implements SeekBar.OnSee
 	@Override
 	protected void onBindDialogView(View v) {
 		super.onBindDialogView(v);
-		Log.d(TAG, "onBindDialogView");
+		Log.d(TAG, "[onBindDialogView]");
 		
 		if (shouldPersist()) {
 			mValue = getPersistedInt(mDefault);
 			mUIValue = getUIValue(mValue);
 		}
-
-		mUIMax = getUIValue(mMax);
+		
+		Log.d(TAG, "[onBindDialogView] mUIValue = " + mUIValue);
 		
 		String t = String.valueOf(mValue);
 		mValueText.setText(mSuffix == null ? t : t.concat(mSuffix));
-		mSeekBar.setMax(mUIMax);
+		
 		mSeekBar.setProgress(mUIValue);
 	}
 
@@ -105,12 +105,15 @@ public class SeekBarPreference extends DialogPreference implements SeekBar.OnSee
 	}
 
 	public void onProgressChanged(SeekBar seek, int value, boolean fromTouch) {
+		Log.d(TAG, "[onProgressChanged] -> value = " + value + ", fromTouch = " + fromTouch);
+		
+//		for (StackTraceElement ste : Thread.currentThread().getStackTrace()) {
+//			Log.d(TAG, ste.toString());
+//		}
+		
 		mUIValue = value;
 		mValue = getPersistValue(mUIValue);
 		String t = String.valueOf(mValue);
-		
-		Log.d(TAG, "onProgressChanged -> t = " + t);
-		
 		mValueText.setText(mSuffix == null ? t : t.concat(mSuffix));
 		
 	}

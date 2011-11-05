@@ -11,6 +11,7 @@ import java.util.Arrays;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -50,6 +51,7 @@ public class MainActivity extends PreferenceActivity implements OnPreferenceChan
 	private SeekBarPreference mVibrateTime;
 	private ListPreference mReminderInterval;
 	
+	private CheckBoxPreference mAutoStartPrefs;
 	private Preference mAboutPrefs;
 	private Preference mCollectLog;
 	
@@ -111,6 +113,9 @@ public class MainActivity extends PreferenceActivity implements OnPreferenceChan
         
         mShowNotificationPres = (CheckBoxPreference) findPreference(getString(R.string.prefs_key_show_notification));
         mShowNotificationPres.setOnPreferenceChangeListener(this);
+        
+        mAutoStartPrefs = (CheckBoxPreference) findPreference(getString(R.string.prefs_key_auto_start));
+        mAutoStartPrefs.setOnPreferenceChangeListener(this);
         
         mAboutPrefs = findPreference(getString(R.string.prefs_key_about));
         mVersionName = getString(R.string.prefs_summary_about, mAppVersionName);
@@ -188,9 +193,19 @@ public class MainActivity extends PreferenceActivity implements OnPreferenceChan
 			
 			Intent intent = new Intent(this, CallStateService.class);
 	        startService(intent);
+		} else if (preference == mAutoStartPrefs) {
+			setBootCompleteReceiverEnabled((Boolean) newValue);
 		}
 		
 		return true;
+	}
+	
+	public void setBootCompleteReceiverEnabled(boolean enabled) {
+		MyLog.d("enabled = " + enabled);
+		PackageManager packageManager = getPackageManager();
+		ComponentName componentName = new ComponentName(this, BootCompleteReceiver.class);
+		int newState = enabled ? PackageManager.COMPONENT_ENABLED_STATE_ENABLED : PackageManager.COMPONENT_ENABLED_STATE_DEFAULT;
+		packageManager.setComponentEnabledSetting(componentName, newState, PackageManager.DONT_KILL_APP);
 	}
 	
 	@SuppressWarnings("unchecked")

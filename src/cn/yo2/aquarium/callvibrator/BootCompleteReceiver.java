@@ -5,14 +5,17 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import cn.yo2.aquarium.logutils.MyLog;
 
 public class BootCompleteReceiver extends BroadcastReceiver {
 
 	@Override
 	public void onReceive(Context context, Intent intent) {
+		String action = intent.getAction();
 		
+		MyLog.d("intent ACTION = " + action);
 		
-		if (Intent.ACTION_BOOT_COMPLETED.equals(intent.getAction())) {
+		if (Intent.ACTION_BOOT_COMPLETED.equals(action)) {
 			
 			SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
 		
@@ -23,6 +26,6 @@ public class BootCompleteReceiver extends BroadcastReceiver {
 		        context.startService(service);
 			}
 		}
+		
 	}
-
 }

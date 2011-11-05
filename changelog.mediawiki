@@ -1,3 +1,8 @@
+== 版本 0.1.6 2011-11-04 ==
+
+# ''Fix'' 震动时长SeekBarPreference不能保存设置。
+
+
 == 版本 0.1.5 2011-10-29 ==
 
 # ''New'' 震动时长设置由ListPreference改为SeekBarPreference，可以40ms到200ms的范围内选择。

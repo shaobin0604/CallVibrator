@@ -40,7 +40,7 @@
 			android:key="@string/prefs_key_vibrate_time"
 	        android:title="@string/prefs_title_vibrate_time"
 	        android:defaultValue="80"
-	        android:max="200"/>
+	        android:max="240"/>
 		
   		<CheckBoxPreference android:title="@string/prefs_title_auto_start"
   			android:key="@string/prefs_key_auto_start"

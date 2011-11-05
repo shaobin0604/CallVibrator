@@ -10,7 +10,7 @@ public class CallVibratorApp extends Application {
 	@Override
 	public void onConfigurationChanged(Configuration newConfig) {
 		super.onConfigurationChanged(newConfig);
-		MyLog.d("onConfigurationChanged()");
+		MyLog.d("onConfigurationChanged() newConfig = " + newConfig);
 	}
 
 	@Override
