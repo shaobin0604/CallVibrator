@@ -1,59 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen
   xmlns:android="http://schemas.android.com/apk/res/android">
-  
-  	<CheckBoxPreference android:title="@string/prefs_title_outgoing_call"
-  		android:key="@string/prefs_key_outgoing_call"
-  		android:defaultValue="false"
-  		android:summaryOn="@string/on"
-  		android:summaryOff="@string/off"/>
   	
-  	<CheckBoxPreference android:title="@string/prefs_title_incoming_call"
-  		android:key="@string/prefs_key_incoming_call"
-  		android:defaultValue="false"
-  		android:summaryOn="@string/on"
-  		android:summaryOff="@string/off"/>
-  	
-  	<CheckBoxPreference android:title="@string/prefs_title_end_call"
-  		android:key="@string/prefs_key_end_call"
-  		android:defaultValue="false"
-  		android:summaryOn="@string/on"
-  		android:summaryOff="@string/off"/>
-  		
-  	<CheckBoxPreference android:title="@string/prefs_title_reminder"
-  		android:key="@string/prefs_key_reminder"
-  		android:defaultValue="false"
-  		android:summaryOn="@string/on"
-  		android:summaryOff="@string/off"/>
-
-  	 <ListPreference android:key="@string/prefs_key_reminder_interval"
-		android:title="@string/prefs_title_reminder_interval"
-		android:dialogTitle="@string/prefs_title_reminder_interval"
-		android:entries="@array/vibrate_interval_entries"
-		android:entryValues="@array/vibrate_interval_entry_values"
-		android:defaultValue="45"
-		android:dependency="@string/prefs_key_reminder"/>
-
-  	<PreferenceCategory android:title="@string/prefs_category_general_settings">
-		
-		<com.hlidskialf.android.preference.SeekBarPreference 
+  	<CheckBoxPreference android:title="@string/prefs_title_listen_call"
+  			android:key="@string/prefs_key_listen_call"
+  			android:defaultValue="true"
+  			android:summaryOn="@string/on"
+  			android:summaryOff="@string/off"/>
+  	<com.hlidskialf.android.preference.SeekBarPreference 
 			android:key="@string/prefs_key_vibrate_time"
-	        android:title="@string/prefs_title_vibrate_time"
-	        android:defaultValue="80"
-	        android:max="240"/>
-		
-  		<CheckBoxPreference android:title="@string/prefs_title_auto_start"
-  			android:key="@string/prefs_key_auto_start"
-  			android:defaultValue="false"
-  			android:summaryOn="@string/on"
-  			android:summaryOff="@string/off"/>
-  			
-  		<CheckBoxPreference android:title="@string/prefs_title_show_notification"
-  			android:key="@string/prefs_key_show_notification"
-  			android:defaultValue="false"
-  			android:summaryOn="@string/on"
-  			android:summaryOff="@string/off"/>
-  	</PreferenceCategory>
+		    android:title="@string/prefs_title_vibrate_time"
+		    android:defaultValue="80"
+		    android:max="240"/>	
+  	
+  	<PreferenceScreen android:title="@string/prefs_title_vibrate_settings"
+  	    android:dependency="@string/prefs_key_listen_call">
+  	    <CheckBoxPreference android:title="@string/prefs_title_outgoing_call"
+	  		android:key="@string/prefs_key_outgoing_call"
+	  		android:defaultValue="true"
+	  		android:summaryOn="@string/on"
+	  		android:summaryOff="@string/off"/>
+  	
+	  	<CheckBoxPreference android:title="@string/prefs_title_incoming_call"
+	  		android:key="@string/prefs_key_incoming_call"
+	  		android:defaultValue="true"
+	  		android:summaryOn="@string/on"
+	  		android:summaryOff="@string/off"/>
+	  	
+	  	<CheckBoxPreference android:title="@string/prefs_title_end_call"
+	  		android:key="@string/prefs_key_end_call"
+	  		android:defaultValue="true"
+	  		android:summaryOn="@string/on"
+	  		android:summaryOff="@string/off"/>
+	  		
+	  	<CheckBoxPreference android:title="@string/prefs_title_reminder"
+	  		android:key="@string/prefs_key_reminder"
+	  		android:defaultValue="true"
+	  		android:summaryOn="@string/on"
+	  		android:summaryOff="@string/off"/>
+	
+	  	 <ListPreference android:key="@string/prefs_key_reminder_interval"
+			android:title="@string/prefs_title_reminder_interval"
+			android:dialogTitle="@string/prefs_title_reminder_interval"
+			android:entries="@array/vibrate_interval_entries"
+			android:entryValues="@array/vibrate_interval_entry_values"
+			android:defaultValue="45"
+			android:dependency="@string/prefs_key_reminder"/>
+  	</PreferenceScreen>
   	
   	<PreferenceCategory android:title="@string/prefs_category_info">
   		<cn.yo2.aquarium.callvibrator.AboutPreference android:key="@string/prefs_key_about" 

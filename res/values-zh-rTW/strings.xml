@@ -2,6 +2,8 @@
 <resources>
     <string name="app_name">通話震動</string>
     
+    <string name="prefs_title_vibrate_settings">震動模式設置</string>
+    
     <string name="prefs_title_outgoing_call">去電接通震動</string>
     <string name="prefs_title_incoming_call">來電接通震動</string>
     <string name="prefs_title_end_call">通話掛斷震動</string>
@@ -9,8 +11,7 @@
     <string name="prefs_title_reminder_interval">提醒時間</string>
     
     <string name="prefs_category_general_settings">常規設置</string>
-    <string name="prefs_title_auto_start">開機啟動</string>
-    <string name="prefs_title_show_notification">顯示狀態欄圖標</string>
+    <string name="prefs_title_listen_call">監聽通話狀態</string>
     
     <string name="prefs_category_info">信息</string>
     

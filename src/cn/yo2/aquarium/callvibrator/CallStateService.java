@@ -9,15 +9,16 @@ import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import android.app.Notification;
-import android.app.PendingIntent;
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
+import android.os.PowerManager;
 import android.os.Vibrator;
+import android.os.PowerManager.WakeLock;
 import android.preference.PreferenceManager;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
@@ -31,6 +32,11 @@ public class CallStateService extends Service {
 	public static final String DEFAULT_REMINDER_TIME_STR = "45";
 	
 	private TelephonyManager mTelephonyManager;
+	
+//	private AlarmManager mAlarmManager;
+	
+	private WakeLock mWakeLock;
+	
 	private int mLastCallState;
 	private int mCurrCallState;
 
@@ -42,8 +48,6 @@ public class CallStateService extends Service {
 	
 	private boolean mReminder;
 	private int mReminderIntervalMillis;
-	
-	private boolean mShowNotification;
 	
 	private boolean mListenOutgoingCall;
 	private boolean mListenIncomingCall;
@@ -73,6 +77,30 @@ public class CallStateService extends Service {
 		}
 		
 	};
+	
+	//-------------- use AlarmManager to do timer -----------------------------
+	
+//	private static final String ACTION_REMINDER_VIBRATE = "ACTION_REMINDER_VIBRATE";
+//	
+//	private BroadcastReceiver mTimerReceiver = new BroadcastReceiver() {
+//		
+//		@Override
+//		public void onReceive(Context context, Intent intent) {
+//			if (ACTION_REMINDER_VIBRATE.equals(intent.getAction())) {
+//				if (mReminder && mInCall) {
+//					MyLog.d("one minute plus interval time out, vibrate");
+//					mVibrator.vibrate(mVibrateTime);
+//					MyLog.d("wait 1 minute for next vibrate");
+//					
+//					PendingIntent operation = PendingIntent.getBroadcast(context, 0, new Intent(ACTION_REMINDER_VIBRATE), 0);
+//					
+//					mAlarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime() + ONE_MINUTE_IN_MILLIS, operation);
+//				}
+//			}
+//		}
+//	};
+	
+	//-------------------------------------------------------------------------
 
 	private PhoneStateListener mListener = new PhoneStateListener() {
 
@@ -88,16 +116,19 @@ public class CallStateService extends Service {
 				mInCall = false;
 				mHandler.removeMessages(WHAT_REMINDER_VIBRATE);
 				
-				if (mListenEndCall) {
-					if (mLastCallState == TelephonyManager.CALL_STATE_OFFHOOK || mLastCallState == TelephonyManager.CALL_STATE_RINGING) {
+				if (mLastCallState == TelephonyManager.CALL_STATE_OFFHOOK || mLastCallState == TelephonyManager.CALL_STATE_RINGING) {
+					if (mListenEndCall) {
 						MyLog.i("[onCallStateChanged] Call End, >>>>> vibrate <<<<<");
-						
 						mVibrator.vibrate(mVibrateTime);
 					}
+					MyLog.i("[onCallStateChanged] Call End from offhook or ringing, stop self");
+					stopSelf();
 				}
 				
 				stopWorkerThread();
 				
+				releaseWakeLock();
+								
 				break;
 			}
 			case TelephonyManager.CALL_STATE_OFFHOOK: {
@@ -139,6 +170,24 @@ public class CallStateService extends Service {
 
 	};
 	
+	private boolean isCDMASim() {
+		TelephonyManager telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+		int simState = telephonyManager.getSimState();
+		if (simState != TelephonyManager.SIM_STATE_READY) {
+			// unknown sim op
+			return false;
+		}
+
+		/*
+		 * China Mobile:  46000, 46002, 46007
+		 * China Unicom:  46001
+		 * China Telecom: 46003
+		 */
+		String simOp = telephonyManager.getSimOperator();
+		
+		return "46003".equals(simOp);
+	}
+	
 	private static final DateFormat DF = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSSZ");
 	
 	private static CharSequence formatTimeStr(long inTimeInMillis) {
@@ -147,9 +196,10 @@ public class CallStateService extends Service {
 
 	private void startWorkerThread() {
 		stopWorkerThread();
-
-		mWorkerThread = new OutgoingCallWorkerThread();
-
+				
+		int mode = isCDMASim() ? OutgoingCallWorkerThread.OPERATOR_MODE_CDMA : OutgoingCallWorkerThread.OPERATOR_MODE_GSM;
+		
+		mWorkerThread = new OutgoingCallWorkerThread(mode);
 		mWorkerThread.start();
 	}
 
@@ -166,8 +216,26 @@ public class CallStateService extends Service {
 				MyLog.e("mWorkerThread.join() interrupted");
 			}
 		}
+	}
+	
+	private void acquireWakeLock() {
+		MyLog.d("try acquireWakeLock");
+		if (mWakeLock == null) {
+			PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
+			mWakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, CallVibratorApp.TAG);
+			mWakeLock.acquire();
+			MyLog.d("acquireWakeLock OK");
+		}
 
-		
+	}
+
+	private void releaseWakeLock() {
+		MyLog.d("try releaseWakeLock");
+		if (mWakeLock != null && mWakeLock.isHeld()) {
+			mWakeLock.release();
+			mWakeLock = null;
+			MyLog.d("releaseWakeLock OK");
+		}
 	}
 
 	@Override
@@ -187,7 +255,7 @@ public class CallStateService extends Service {
 		mTelephonyManager = (TelephonyManager) getSystemService(TELEPHONY_SERVICE);
 		mTelephonyManager.listen(mListener, PhoneStateListener.LISTEN_CALL_STATE);
 		
-		
+//		mAlarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
 	}
 	
 	@Override
@@ -218,46 +286,29 @@ public class CallStateService extends Service {
 		mReminderIntervalMillis = Integer.valueOf(sharedPreferences.getString(getString(R.string.prefs_key_reminder_interval), DEFAULT_REMINDER_TIME_STR)) * 1000;
 		MyLog.d(String.format("Reminder[%s], millis =  %d", String.valueOf(mReminder), mReminderIntervalMillis));
 		
-		mShowNotification = sharedPreferences.getBoolean(getString(R.string.prefs_key_show_notification), false);
-		
-		MyLog.d("Show Notification = " + mShowNotification);
-		
-		if (mShowNotification) {
-			showNotification();
-		} else {
-			cancelNotification();
-		}
-		
 		return START_STICKY;
 	}
 
-	private void cancelNotification() {
-		stopForeground(true);
-	}
-
-	private void showNotification() {
-		Notification notification = new Notification(R.drawable.ic_stat, getString(R.string.stat_running), System.currentTimeMillis());
-		
-		final String on = getString(R.string.on);
-		final String off = getString(R.string.off);
-		
-		String contentText = getString(R.string.content_text, 
-				mListenOutgoingCall ? on : off,
-				mListenIncomingCall ? on : off,
-				mListenEndCall ? on :off);
-		
-		PendingIntent contentIntent = PendingIntent.getActivity(this, 0, new Intent(this, MainActivity.class), Intent.FLAG_ACTIVITY_NEW_TASK);
-		
-		notification.setLatestEventInfo(this, getString(R.string.stat_running), contentText, contentIntent);
-		
-		startForeground(R.xml.prefs, notification);
-	}
 
 	private class OutgoingCallWorkerThread extends Thread {
+		public static final int OPERATOR_MODE_GSM = 0;
+		public static final int OPERATOR_MODE_CDMA = 1;
 
 		private static final int CONNECT_TIME_DELAY = 1000;
 		
 		private volatile boolean mIsThreadKill;
+		
+		private int mOperatorMode;
+		
+		public OutgoingCallWorkerThread() {
+			super();
+			mOperatorMode = OPERATOR_MODE_GSM;
+		}
+		
+		public OutgoingCallWorkerThread(int operatorMode) {
+			super();
+			mOperatorMode = operatorMode;
+		}
 
 		public synchronized void requestKill() {
 			mIsThreadKill = true;
@@ -268,12 +319,24 @@ public class CallStateService extends Service {
 		}
 
 		public void run() {
+			MyLog.d("OutgoingCallWorkerThread in mode = " + (mOperatorMode == 0 ? "GSM" : "CDMA"));
+			
 			Process process = null;
 			BufferedReader reader = null;
 			try {
 				Runtime runtime = Runtime.getRuntime();
 				// run logcat
-				process = runtime.exec("/system/bin/logcat -b radio -s GSM:D");
+				
+				String command = "/system/bin/logcat -b radio -s GSM:D";
+				switch (mOperatorMode) {
+				case OPERATOR_MODE_CDMA:
+					command = "/system/bin/logcat -b radio -s CDMA:D";
+					break;
+				default:
+					break;
+				}
+				
+				process = runtime.exec(command);
 			
 				reader = new BufferedReader(new InputStreamReader(process
 						.getInputStream()));
@@ -312,8 +375,18 @@ public class CallStateService extends Service {
 
 			long time = System.currentTimeMillis();
 
-			Pattern pattern = Pattern
-					.compile("\\[GSMConn\\] onConnectedInOrOut: connectTime=(\\d+)");
+			String regex = "\\[GSMConn\\] onConnectedInOrOut: connectTime=(\\d+)";
+			
+			switch (mOperatorMode) {
+			case OPERATOR_MODE_CDMA:
+				regex = "\\[CDMAConn\\] onConnectedInOrOut: connectTime=(\\d+)";
+				break;
+
+			default:
+				break;
+			}
+			
+			Pattern pattern = Pattern.compile(regex);
 
 			Matcher matcher = pattern.matcher(line);
 
@@ -338,9 +411,9 @@ public class CallStateService extends Service {
 						
 						mHandler.removeMessages(WHAT_REMINDER_VIBRATE);
 						mHandler.sendEmptyMessageDelayed(WHAT_REMINDER_VIBRATE, mReminderIntervalMillis);
+						
+						acquireWakeLock();
 					}
-					
-					
 				}
 			}
 		}
@@ -358,5 +431,7 @@ public class CallStateService extends Service {
 		stopForeground(true);
 
 		mTelephonyManager.listen(mListener, PhoneStateListener.LISTEN_NONE);
+		
+		releaseWakeLock();
 	}
 }

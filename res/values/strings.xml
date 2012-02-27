@@ -2,6 +2,8 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="app_name">Call Vibrator</string>
     
+    <string name="prefs_title_vibrate_settings">Vibrate Mode Settings</string>
+    
     <string name="prefs_title_outgoing_call">Outgoing Call vibrate</string>
     <string name="prefs_key_outgoing_call">prefs_key_outgoing_call</string>
     
@@ -12,11 +14,8 @@
     <string name="prefs_key_end_call">prefs_key_end_call</string>
     
     <string name="prefs_category_general_settings">General Settings</string>
-    <string name="prefs_title_auto_start">Run when boot complete</string>
-    <string name="prefs_key_auto_start">prefs_key_auto_start</string>
-    
-    <string name="prefs_title_show_notification">Show in status bar</string>
-    <string name="prefs_key_show_notification">prefs_key_show_notification</string>
+    <string name="prefs_title_listen_call">Listen Call State</string>
+    <string name="prefs_key_listen_call">prefs_listen_call</string>
     
     <string name="prefs_key_reminder">prefs_key_reminder</string>
     <string name="prefs_title_reminder">Outgoing Call Time Alert</string>

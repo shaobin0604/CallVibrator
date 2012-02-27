@@ -1,11 +1,11 @@
 package cn.yo2.aquarium.callvibrator;
 
-import cn.yo2.aquarium.logutils.MyLog;
 import android.app.Application;
 import android.content.res.Configuration;
+import cn.yo2.aquarium.logutils.MyLog;
 
 public class CallVibratorApp extends Application {
-	private static final String TAG = CallVibratorApp.class.getSimpleName();
+	static final String TAG = CallVibratorApp.class.getSimpleName();
 
 	@Override
 	public void onConfigurationChanged(Configuration newConfig) {
@@ -31,5 +31,4 @@ public class CallVibratorApp extends Application {
 		super.onTerminate();
 		MyLog.d("onTerminate()");
 	}
-	
 }

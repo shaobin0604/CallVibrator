@@ -13,7 +13,6 @@ import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.ComponentName;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.content.pm.PackageInfo;
@@ -46,12 +45,10 @@ public class MainActivity extends PreferenceActivity implements OnPreferenceChan
 	private CheckBoxPreference mEndCallPrefs;
 	private CheckBoxPreference mReminderPrefs;
 	
-	private CheckBoxPreference mShowNotificationPres;
-	
 	private SeekBarPreference mVibrateTime;
 	private ListPreference mReminderInterval;
 	
-	private CheckBoxPreference mAutoStartPrefs;
+	private CheckBoxPreference mListenCall;
 	private Preference mAboutPrefs;
 	private Preference mCollectLog;
 	
@@ -94,28 +91,14 @@ public class MainActivity extends PreferenceActivity implements OnPreferenceChan
         mSharedPreferences = getPreferenceManager().getSharedPreferences();
 
         mOutgoingCallPrefs = (CheckBoxPreference) findPreference(getString(R.string.prefs_key_outgoing_call));
-        mOutgoingCallPrefs.setOnPreferenceChangeListener(this);
-        
         mIncomingCallPrefs = (CheckBoxPreference) findPreference(getString(R.string.prefs_key_incoming_call));
-        mIncomingCallPrefs.setOnPreferenceChangeListener(this);
-        
         mEndCallPrefs = (CheckBoxPreference) findPreference(getString(R.string.prefs_key_end_call));
-        mEndCallPrefs.setOnPreferenceChangeListener(this);
-        
         mReminderPrefs = (CheckBoxPreference) findPreference(getString(R.string.prefs_key_reminder));
-        mReminderPrefs.setOnPreferenceChangeListener(this);
-        
         mVibrateTime = (SeekBarPreference) findPreference(getString(R.string.prefs_key_vibrate_time));
-        mVibrateTime.setOnPreferenceChangeListener(this);
-        
         mReminderInterval = (ListPreference) findPreference(getString(R.string.prefs_key_reminder_interval));
-        mReminderInterval.setOnPreferenceChangeListener(this);
         
-        mShowNotificationPres = (CheckBoxPreference) findPreference(getString(R.string.prefs_key_show_notification));
-        mShowNotificationPres.setOnPreferenceChangeListener(this);
-        
-        mAutoStartPrefs = (CheckBoxPreference) findPreference(getString(R.string.prefs_key_auto_start));
-        mAutoStartPrefs.setOnPreferenceChangeListener(this);
+        mListenCall = (CheckBoxPreference) findPreference(getString(R.string.prefs_key_listen_call));
+        mListenCall.setOnPreferenceChangeListener(this);
         
         mAboutPrefs = findPreference(getString(R.string.prefs_key_about));
         mVersionName = getString(R.string.prefs_summary_about, mAppVersionName);
@@ -123,9 +106,6 @@ public class MainActivity extends PreferenceActivity implements OnPreferenceChan
 		
 		mCollectLog = findPreference(getString(R.string.prefs_key_collect_log));
 		mCollectLog.setOnPreferenceClickListener(this);
-		
-        Intent intent = new Intent(this, CallStateService.class);
-        startService(intent);
     }
     
     @Override
@@ -183,27 +163,17 @@ public class MainActivity extends PreferenceActivity implements OnPreferenceChan
 	}
 
 	public boolean onPreferenceChange(Preference preference, Object newValue) {
-		if (preference == mOutgoingCallPrefs ||
-				preference == mIncomingCallPrefs ||
-				preference == mEndCallPrefs ||
-				preference == mVibrateTime ||
-				preference == mShowNotificationPres ||
-				preference == mReminderPrefs ||
-				preference == mReminderInterval ) {
-			
-			Intent intent = new Intent(this, CallStateService.class);
-	        startService(intent);
-		} else if (preference == mAutoStartPrefs) {
-			setBootCompleteReceiverEnabled((Boolean) newValue);
+		if (preference == mListenCall) {
+			setMyReceiverEnabled((Boolean) newValue);
 		}
 		
 		return true;
 	}
 	
-	public void setBootCompleteReceiverEnabled(boolean enabled) {
+	public void setMyReceiverEnabled(boolean enabled) {
 		MyLog.d("enabled = " + enabled);
 		PackageManager packageManager = getPackageManager();
-		ComponentName componentName = new ComponentName(this, BootCompleteReceiver.class);
+		ComponentName componentName = new ComponentName(this, MyReceiver.class);
 		int newState = enabled ? PackageManager.COMPONENT_ENABLED_STATE_ENABLED : PackageManager.COMPONENT_ENABLED_STATE_DEFAULT;
 		packageManager.setComponentEnabledSetting(componentName, newState, PackageManager.DONT_KILL_APP);
 	}
