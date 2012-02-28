@@ -16,7 +16,8 @@ public class CallVibratorApp extends Application {
 	@Override
 	public void onCreate() {
 		super.onCreate();
-		MyLog.initLog(TAG, true, false);
+		MyLog.initLog(TAG, true, true); // only log level above info in release version
+//		MyLog.initLog(TAG, true, false); // log everything in debug version
 		MyLog.d("onCreate()");
 	}
 
