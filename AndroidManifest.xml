@@ -14,7 +14,7 @@
 
 		<service android:name=".CallStateService"/>
 		
-		<receiver android:name=".MyReceiver" android:enabled="true">
+		<receiver android:name=".MyReceiver">
 			<intent-filter>                                                   
                  <action android:name="android.intent.action.PHONE_STATE"/>
             </intent-filter>

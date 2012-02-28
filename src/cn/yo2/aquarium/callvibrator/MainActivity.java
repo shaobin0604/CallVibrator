@@ -174,7 +174,7 @@ public class MainActivity extends PreferenceActivity implements OnPreferenceChan
 		MyLog.d("enabled = " + enabled);
 		PackageManager packageManager = getPackageManager();
 		ComponentName componentName = new ComponentName(this, MyReceiver.class);
-		int newState = enabled ? PackageManager.COMPONENT_ENABLED_STATE_ENABLED : PackageManager.COMPONENT_ENABLED_STATE_DEFAULT;
+		int newState = enabled ? PackageManager.COMPONENT_ENABLED_STATE_ENABLED : PackageManager.COMPONENT_ENABLED_STATE_DISABLED;
 		packageManager.setComponentEnabledSetting(componentName, newState, PackageManager.DONT_KILL_APP);
 	}
 	
