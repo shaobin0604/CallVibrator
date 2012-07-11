@@ -2,6 +2,10 @@
 
 Android平台最好的通话震动辅助软件。
 
+如果您觉得这个软件还不错，并愿意提供一些资金支持我继续开发的话，我表示衷心的感谢。
+
+<a href='http://me.alipay.com/shaobin0604'><img src='https://img.alipay.com/sys/personalprod/style/mc/btn-index.png' /></a>
+
 ## 功能简介 ##
 
 *   拔出电话接通时（对方按下接听键）震动提醒。
@@ -24,10 +28,6 @@ Android平台最好的通话震动辅助软件。
 *   K-Touch W606/android2.1
 
 由于 Android 设备/ROM 众多，如果本软件在您的手机上可以正常工作，还请提供您的设备型号/ROM信息给我，我把它加入到本软件的支持设备列表中，以便新用户参考。如果本软件在您的手机上不能正常工作，还请及时反馈，联系方式：shaobin0604@qq.com。
-
-如果您觉得这个软件还不错，并愿意提供一些资金支持我继续开发的话，我表示衷心的感谢。
-
-<a href='http://me.alipay.com/shaobin0604'><img src='https://img.alipay.com/sys/personalprod/style/mc/btn-index.png' /></a>
 
 ## 关于权限 ##
 
