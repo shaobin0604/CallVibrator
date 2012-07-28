@@ -17,7 +17,7 @@
   	    android:dependency="@string/prefs_key_listen_call">
   	    <CheckBoxPreference android:title="@string/prefs_title_outgoing_call"
 	  		android:key="@string/prefs_key_outgoing_call"
-	  		android:defaultValue="true"
+	  		android:defaultValue="false"
 	  		android:summaryOn="@string/on"
 	  		android:summaryOff="@string/off"/>
   	

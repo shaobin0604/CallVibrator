@@ -1,0 +1,18 @@
+# view res/xml/prefs.xml #generated:52
+-keep class cn.yo2.aquarium.callvibrator.AboutPreference { <init>(...); }
+
+# view AndroidManifest.xml #generated:15
+-keep class cn.yo2.aquarium.callvibrator.CallStateService { <init>(...); }
+
+# view AndroidManifest.xml #generated:6
+-keep class cn.yo2.aquarium.callvibrator.CallVibratorApp { <init>(...); }
+
+# view AndroidManifest.xml #generated:8
+-keep class cn.yo2.aquarium.callvibrator.MainActivity { <init>(...); }
+
+# view AndroidManifest.xml #generated:17
+-keep class cn.yo2.aquarium.callvibrator.MyReceiver { <init>(...); }
+
+# view res/xml/prefs.xml #generated:10
+-keep class com.hlidskialf.android.preference.SeekBarPreference { <init>(...); }
+
