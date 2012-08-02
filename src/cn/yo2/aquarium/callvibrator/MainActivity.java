@@ -6,6 +6,7 @@ import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.ComponentName;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.content.pm.PackageInfo;
@@ -45,6 +46,7 @@ public class MainActivity extends PreferenceActivity implements OnPreferenceChan
 
     private static final int DLG_COLLECT_LOG_OK = 1000;
     private static final int DLG_COLLECT_LOG_FAIL = 2000;
+	private static final int DLG_GRANT_READ_LOG_PERMISSION = 3000;
 
     static {
         RootTools.debugMode = true;
@@ -259,10 +261,33 @@ public class MainActivity extends PreferenceActivity implements OnPreferenceChan
                 builder.setNeutralButton(android.R.string.ok, null);
                 return builder.create();
             }
+            case DLG_GRANT_READ_LOG_PERMISSION: {
+            	AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+                builder.setMessage(R.string.msg_read_logs_permission_issue_in_jelly_bean);
+                builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+					
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						new GrantPermissionTask().execute((Void)null);
+					}
+				});
+                builder.setNegativeButton(android.R.string.cancel, null);
+            }
             default:
                 break;
         }
         return super.onCreateDialog(id);
+    }
+    
+    private class GrantPermissionTask extends AsyncTask<Void, Void, Boolean> {
+    	private ProgressDialog mProgressDialog;
+    	
+		@Override
+		protected Boolean doInBackground(Void... params) {
+			// TODO Auto-generated method stub
+			return null;
+		}
+    	
     }
 
     private class CollectLogTask extends AsyncTask<ArrayList<String>, Void, Boolean> {

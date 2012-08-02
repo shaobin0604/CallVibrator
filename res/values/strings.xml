@@ -49,10 +49,12 @@
     <string name="prefs_title_collect_log">Collect Log</string>
     <string name="prefs_summary_collect_log">Send log to developer</string>
     
-    <string name="acquiring_log_progress_dialog_message">Collecting log, please wait...</string>
+    <string name="acquiring_log_progress_dialog_message">Collecting log, please wait…</string>
     
     <string name="msg_collect_log_success">Log saved to \n/sdcard/CallVibrator.log\nPlease send it to\nshaobin0604@qq.com</string>
     <string name="msg_collect_log_fail">Collect log Fail!</string>
+    
+    <string name="msg_read_logs_permission_issue_in_jelly_bean">For Google has changed the android.permission.READ_LOGS policy</string>
     
     <string name="device_info_fmt">
 CallVibrator version: <xliff:g id="application_version">%s</xliff:g>\n
