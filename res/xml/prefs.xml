@@ -35,7 +35,7 @@
 	  		
 	  	<CheckBoxPreference android:title="@string/prefs_title_reminder"
 	  		android:key="@string/prefs_key_reminder"
-	  		android:defaultValue="true"
+	  		android:defaultValue="false"
 	  		android:summaryOn="@string/on"
 	  		android:summaryOff="@string/off"/>
 	

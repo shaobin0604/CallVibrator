@@ -36,8 +36,15 @@
     <string name="prefs_title_collect_log">收集日誌</string>
     <string name="prefs_summary_collect_log">發送日誌給開發者</string>
     
-    <string name="acquiring_log_progress_dialog_message">正在收集日誌，請等待...</string>
+    <string name="acquiring_log_progress_dialog_message">正在收集日誌，請等待…</string>
     
     <string name="msg_collect_log_success">已保存日誌到\n/sdcard/CallVibrator.log\n請發送給\nshaobin0604@qq.com</string>
     <string name="msg_collect_log_fail">收集日誌失敗</string>
+    
+    <string name="msg_read_logs_permission_issue_in_jelly_bean"><b>通話震動</b>應用需要 <i>READ_LOGS</i> 權限實現接聽震動, 但是在<b>Jelly Bean</b>中 Google 修改了該權限的策略，普通第三方應用默認都不能使用該權限，因此妳必須以<b>ROOT</b>用户身份將<i>READ_LOGS</i>權限授予通話震動應用</string>
+    <string name="msg_grant_read_logs_permission_progress">正在授予 <i>READ_LOGS</i> 權限給<b>通話震動</b>應用…</string>
+    <string name="msg_grant_read_logs_permission_ok">授予 <i>READ_LOGS</i> 權限給<b>通話震動</b>應用成功</string>
+    <string name="msg_grant_read_logs_permission_error_no_su">妳的設備沒有被<b>ROOT</b></string>
+    <string name="msg_grant_read_logs_permission_error_access_not_given">無法切換到<b>ROOT</b></string>
+    <string name="msg_grant_read_logs_permission_error_execute_command">授予 <i>READ_LOGS</i> 權限給<b>通話震動</b>應用失敗</string>
 </resources>

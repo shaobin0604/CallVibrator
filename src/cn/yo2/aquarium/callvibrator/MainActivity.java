@@ -22,6 +22,7 @@ import android.preference.Preference;
 import android.preference.Preference.OnPreferenceChangeListener;
 import android.preference.Preference.OnPreferenceClickListener;
 import android.preference.PreferenceActivity;
+import android.widget.Toast;
 
 import cn.yo2.aquarium.logutils.MyLog;
 
@@ -46,11 +47,17 @@ public class MainActivity extends PreferenceActivity implements OnPreferenceChan
 
     private static final int DLG_COLLECT_LOG_OK = 1000;
     private static final int DLG_COLLECT_LOG_FAIL = 2000;
-	private static final int DLG_GRANT_READ_LOG_PERMISSION = 3000;
+    
+    private static final int DLG_READ_LOG_PERMISSION_POLICY = 3000;
+    private static final int DLG_GRANT_READ_LOG_PERMISSION_PROGRESS = 4000;
+    private static final int DLG_GRANT_READ_LOG_PERMISSION_RESULT = 5000;
+	
+	
 
     static {
         RootTools.debugMode = true;
     }
+    private CallVibratorApp mApp;
 
     private CheckBoxPreference mOutgoingCallPrefs;
     private CheckBoxPreference mIncomingCallPrefs;
@@ -85,6 +92,8 @@ public class MainActivity extends PreferenceActivity implements OnPreferenceChan
         super.onCreate(savedInstanceState);
 
         mContext = this;
+        
+        mApp = (CallVibratorApp) getApplication();
 
         addPreferencesFromResource(R.xml.prefs);
 
@@ -104,7 +113,6 @@ public class MainActivity extends PreferenceActivity implements OnPreferenceChan
         mSharedPreferences = getPreferenceManager().getSharedPreferences();
 
         mOutgoingCallPrefs = (CheckBoxPreference) findPreference(getString(R.string.prefs_key_outgoing_call));
-        mOutgoingCallPrefs.setOnPreferenceChangeListener(this);
 
         mIncomingCallPrefs = (CheckBoxPreference) findPreference(getString(R.string.prefs_key_incoming_call));
         mEndCallPrefs = (CheckBoxPreference) findPreference(getString(R.string.prefs_key_end_call));
@@ -121,6 +129,18 @@ public class MainActivity extends PreferenceActivity implements OnPreferenceChan
 
         mCollectLog = findPreference(getString(R.string.prefs_key_collect_log));
         mCollectLog.setOnPreferenceClickListener(this);
+        
+        if (mApp.isSDKVersionBelowJellyBean()) {
+        	MyLog.d("SDK version below Jelly Bean, skip READ_LOGS permission check");
+        	return;
+        }
+        
+        if (mApp.isReadLogsPermissionGranted()) {
+        	MyLog.d("READ_LOGS permission granted");
+        	return;
+        }
+
+        showDialog(DLG_READ_LOG_PERMISSION_POLICY);
     }
 
     @Override
@@ -181,14 +201,6 @@ public class MainActivity extends PreferenceActivity implements OnPreferenceChan
     public boolean onPreferenceChange(Preference preference, Object newValue) {
         if (preference == mListenCall) {
             setMyReceiverEnabled((Boolean) newValue);
-        } else if (preference == mOutgoingCallPrefs) {
-            if ((Boolean) newValue) {
-                if (CallVibratorApp.checkOutgoingCallFeasible() == CallVibratorApp.OUTGOING_CALL_AVAILABLE) {
-                    return true;
-                } else {
-                    return false;
-                }
-            }
         }
         return true;
     }
@@ -261,8 +273,16 @@ public class MainActivity extends PreferenceActivity implements OnPreferenceChan
                 builder.setNeutralButton(android.R.string.ok, null);
                 return builder.create();
             }
-            case DLG_GRANT_READ_LOG_PERMISSION: {
+            case DLG_GRANT_READ_LOG_PERMISSION_RESULT: {
             	AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+            	builder.setMessage("");
+            	builder.setNeutralButton(android.R.string.ok, null);
+            	return builder.create();
+            }
+            
+            case DLG_READ_LOG_PERMISSION_POLICY: {
+            	AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+            	builder.setTitle(android.R.string.dialog_alert_title);
                 builder.setMessage(R.string.msg_read_logs_permission_issue_in_jelly_bean);
                 builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
 					
@@ -271,23 +291,93 @@ public class MainActivity extends PreferenceActivity implements OnPreferenceChan
 						new GrantPermissionTask().execute((Void)null);
 					}
 				});
-                builder.setNegativeButton(android.R.string.cancel, null);
+                builder.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+					
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						setOutgoingCallPrefsEnabled(false);
+					}
+				});
+                
+                return builder.create();
+            }
+            case DLG_GRANT_READ_LOG_PERMISSION_PROGRESS: {
+            	ProgressDialog progressDialog = new ProgressDialog(mContext);
+            	progressDialog.setMessage(getString(R.string.msg_grant_read_logs_permission_progress));
+            	progressDialog.setCancelable(false);
+            	return progressDialog;
             }
             default:
                 break;
         }
         return super.onCreateDialog(id);
     }
-    
-    private class GrantPermissionTask extends AsyncTask<Void, Void, Boolean> {
-    	private ProgressDialog mProgressDialog;
+
+    @Override
+    protected void onPrepareDialog(int id, Dialog dialog, Bundle args) {
     	
-		@Override
-		protected Boolean doInBackground(Void... params) {
-			// TODO Auto-generated method stub
-			return null;
+    	switch (id) {
+		case DLG_GRANT_READ_LOG_PERMISSION_RESULT:{
+			AlertDialog alertDialog = (AlertDialog) dialog;
+	    	
+	    	int result = args.getInt("result");
+			switch (result) {
+			case CallVibratorApp.OUTGOING_CALL_AVAILABLE:
+				alertDialog.setMessage(getString(R.string.msg_grant_read_logs_permission_ok));
+				break;
+			case CallVibratorApp.OUTGOING_CALL_UNAVAILABLE_NO_SU:
+				alertDialog.setMessage(getString(R.string.msg_grant_read_logs_permission_error_no_su));
+				break;
+			case CallVibratorApp.OUTGOING_CALL_UNAVAILABLE_ACCESS_NOT_GIVEN:
+				alertDialog.setMessage(getString(R.string.msg_grant_read_logs_permission_error_access_not_given));
+				break;
+			case CallVibratorApp.OUTGOING_CALL_UNAVAILABLE_EXECUTE_COMMAND_IO_EXCEPTION:
+			case CallVibratorApp.OUTGOING_CALL_UNAVAILABLE_EXECUTE_COMMAND_ROOTTOOLS_EXCEPTION:
+			case CallVibratorApp.OUTGOING_CALL_UNAVAILABLE_EXECUTE_COMMAND_TIMEOUT_EXCEPTION:
+				alertDialog.setMessage(getString(R.string.msg_grant_read_logs_permission_error_execute_command));
+				break;
+
+			default:
+				break;
+			}
+			break;
+		}
+		default:
+			break;
 		}
     	
+    	
+
+    }
+    
+    private class GrantPermissionTask extends AsyncTask<Void, Void, Integer> {
+    	
+    	
+    	@Override
+    	protected void onPreExecute() {
+    		showDialog(DLG_GRANT_READ_LOG_PERMISSION_PROGRESS);
+    	}
+    	
+		@Override
+		protected Integer doInBackground(Void... params) {
+			return mApp.checkOutgoingCallFeasible();
+		}
+		
+		@Override
+		protected void onPostExecute(Integer result) {
+			dismissDialog(DLG_GRANT_READ_LOG_PERMISSION_PROGRESS);
+			
+			setOutgoingCallPrefsEnabled(result == CallVibratorApp.OUTGOING_CALL_AVAILABLE);
+			
+			Bundle bundle = new Bundle();
+			bundle.putInt("result", result);
+			showDialog(DLG_GRANT_READ_LOG_PERMISSION_RESULT, bundle);
+		}
+    }
+    
+    private void setOutgoingCallPrefsEnabled(boolean enabled) {
+    	mOutgoingCallPrefs.setEnabled(enabled);
+    	mReminderPrefs.setEnabled(enabled);
     }
 
     private class CollectLogTask extends AsyncTask<ArrayList<String>, Void, Boolean> {

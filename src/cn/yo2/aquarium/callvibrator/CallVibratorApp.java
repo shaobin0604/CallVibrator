@@ -1,6 +1,7 @@
 package cn.yo2.aquarium.callvibrator;
 
 import android.app.Application;
+import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.os.Build;
 
@@ -52,12 +53,21 @@ public class CallVibratorApp extends Application {
 		MyLog.d("onTerminate()");
 	}
 	
+	public boolean isReadLogsPermissionGranted() {
+		PackageManager pm = getPackageManager();
+		return pm.checkPermission("android.permission.READ_LOGS", getPackageName()) == PackageManager.PERMISSION_GRANTED;
+	}
+	
+    public boolean isSDKVersionBelowJellyBean() {
+        return Build.VERSION.SDK_INT < 16;
+    }
+	
 	/*
      * Google has changed policy of android.permission.READ_LOGS in Jelly Bean
      * 
      * see https://github.com/shaobin0604/CallVibrator/issues/1
      */
-    public static int checkOutgoingCallFeasible() {
+    public int checkOutgoingCallFeasible() {
         if (isSDKVersionBelowJellyBean()) {
             MyLog.i("SDK below Jelly Bean");
             return OUTGOING_CALL_AVAILABLE;
@@ -82,7 +92,13 @@ public class CallVibratorApp extends Application {
             for (String outputline : output) {
                 MyLog.i(GRANT_READ_LOGS_PERMISSION_COMMAND + "return: " + outputline);
             }
-            return OUTGOING_CALL_AVAILABLE;
+            
+            if (isReadLogsPermissionGranted()) {
+            	return OUTGOING_CALL_AVAILABLE;
+            } else {
+            	return OUTGOING_CALL_UNAVAILABLE_EXECUTE_COMMAND_ROOTTOOLS_EXCEPTION;
+            }
+            
         } catch (IOException e) {
             // something went wrong, deal with it here
             e.printStackTrace();
@@ -98,7 +114,5 @@ public class CallVibratorApp extends Application {
         }
     }
 
-    private static boolean isSDKVersionBelowJellyBean() {
-        return Build.VERSION.SDK_INT < 16;
-    }
+
 }
