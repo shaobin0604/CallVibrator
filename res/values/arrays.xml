@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
-	<string-array name="vibrate_time_entries">
+<resources xmlns:tools="http://schemas.android.com/tools">
+	<string-array name="vibrate_time_entries" tools:ignore="UnusedResources">
 		<item>Weak(40 ms)</item>
 		<item>Medium(80 ms)</item>
 		<item>Strong(120 ms)</item>
 	</string-array>
 	
-	<string-array name="vibrate_time_entry_values">
+	<string-array name="vibrate_time_entry_values" tools:ignore="UnusedResources,MissingTranslation">
 		<item>40</item>
 		<item>80</item>
 		<item>120</item>
@@ -18,7 +18,7 @@
 		<item>55 sec</item>
 	</string-array>
 	
-	<string-array name="vibrate_interval_entry_values">
+	<string-array name="vibrate_interval_entry_values" tools:ignore="MissingTranslation">
 		<item>45</item>
 		<item>50</item>
 		<item>55</item>

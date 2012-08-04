@@ -52,10 +52,12 @@
   		<cn.yo2.aquarium.callvibrator.AboutPreference android:key="@string/prefs_key_about" 
   			android:title="@string/prefs_title_about"
   			android:persistent="false"/>
-  		<Preference android:title="@string/prefs_title_donate_author"
+  		<Preference android:key="@string/prefs_key_donate_author" android:title="@string/prefs_title_donate_author"
   			android:persistent="false"
-  			android:summary="@string/prefs_summary_donate_author"/>
-  		<Preference android:key="prefs_key_collect_log" 
+  			android:summary="@string/prefs_summary_donate_author">
+  			<intent android:action="android.intent.action.VIEW" android:data="https://me.alipay.com/shaobin0604"/>
+  		</Preference>
+  		<Preference android:key="@string/prefs_key_collect_log" 
   			android:title="@string/prefs_title_collect_log"
   			android:persistent="false"
   			android:summary="@string/prefs_summary_collect_log"/>

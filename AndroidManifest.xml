@@ -1,8 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-	package="cn.yo2.aquarium.callvibrator" android:versionCode="20120227" android:versionName="0.2.0"
+	package="cn.yo2.aquarium.callvibrator" android:versionCode="20120804" android:versionName="0.2.1"
 	android:installLocation="internalOnly">
-   
+
+    <uses-sdk android:minSdkVersion="8" android:targetSdkVersion="16"/>
+    
+    <uses-permission android:name="android.permission.PROCESS_OUTGOING_CALLS" />
+	<uses-permission android:name="android.permission.READ_PHONE_STATE"/>
+	<uses-permission android:name="android.permission.READ_LOGS" />
+	<uses-permission android:name="android.permission.VIBRATE" />
+	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+	<uses-permission android:name="android.permission.WAKE_LOCK"/>
+	
 	<application android:icon="@drawable/ic_launcher" android:label="@string/app_name"
 		android:name=".CallVibratorApp">
 		<activity android:name=".MainActivity" android:label="@string/app_name" android:launchMode="singleInstance">
@@ -24,13 +33,4 @@
             </intent-filter>
 		</receiver>
 	</application>
-	
-	<uses-permission android:name="android.permission.PROCESS_OUTGOING_CALLS" />
-	<uses-permission android:name="android.permission.READ_PHONE_STATE"/>
-	<uses-permission android:name="android.permission.READ_LOGS" />
-	<uses-permission android:name="android.permission.VIBRATE" />
-	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-	<uses-permission android:name="android.permission.WAKE_LOCK"/>
-	 
-	<uses-sdk android:minSdkVersion="7" android:targetSdkVersion="14"/>
 </manifest> 

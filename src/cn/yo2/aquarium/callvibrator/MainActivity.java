@@ -69,6 +69,7 @@ public class MainActivity extends PreferenceActivity implements OnPreferenceChan
 
     private CheckBoxPreference mListenCall;
     private Preference mAboutPrefs;
+    private Preference mDonateAuthorPrefs;
     private Preference mCollectLog;
 
     private SharedPreferences mSharedPreferences;
@@ -126,6 +127,8 @@ public class MainActivity extends PreferenceActivity implements OnPreferenceChan
         mAboutPrefs = findPreference(getString(R.string.prefs_key_about));
         mVersionName = getString(R.string.prefs_summary_about, mAppVersionName);
         mAboutPrefs.setSummary(mVersionName);
+        
+        mDonateAuthorPrefs = findPreference(getString(R.string.prefs_key_donate_author));
 
         mCollectLog = findPreference(getString(R.string.prefs_key_collect_log));
         mCollectLog.setOnPreferenceClickListener(this);

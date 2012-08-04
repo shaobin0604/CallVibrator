@@ -17,6 +17,13 @@ gen/*
 # proguard generated files
 proguard/*
 
+# log files
+system.txt
+radio.txt
+main.txt
+traces.txt
+traces.txt.bugreport
+
 # Thumbs.db
 Thumbs.db
 

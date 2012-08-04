@@ -28,6 +28,7 @@
     <string name="prefs_summary_about">Version: %1$s</string>
     <string name="text_build">Build: %1$s</string>
     
+    <string name="prefs_key_donate_author">prefs_key_donate_author</string>
     <string name="prefs_title_donate_author">Donate Author</string>
     <string name="prefs_summary_donate_author">Alipay: shaobin0604@163.com</string>
     
