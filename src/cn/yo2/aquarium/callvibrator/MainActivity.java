@@ -88,7 +88,8 @@ public class MainActivity extends PreferenceActivity implements OnPreferenceChan
     private String mFormat = "time";
 
     /** Called when the activity is first created. */
-    @Override
+    @SuppressWarnings("deprecation")
+	@Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 

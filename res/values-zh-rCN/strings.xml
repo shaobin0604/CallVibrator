@@ -2,6 +2,8 @@
 <resources>
     <string name="app_name">通话震动</string>
     
+    <string name="prefs_category_settings">设置</string>
+    
     <string name="prefs_title_vibrate_settings">震动模式设置</string>
     
     <string name="prefs_title_outgoing_call">去电接通震动</string>
@@ -21,6 +23,7 @@
     <string name="prefs_title_donate_author">捐助作者开发</string>
     <string name="prefs_summary_donate_author">支付宝: shaobin0604@163.com</string>
     
+    <string name="text_author">作者: shaobin</string>
     <string name="text_contact_author">邮件: shaobin0604@qq.com</string>
     
     <string name="text_more">我的其他应用</string>
@@ -32,6 +35,9 @@
     <string name="text_ms"> 毫秒</string>
     <string name="on">开启</string>
     <string name="off">关闭</string>
+    
+    <string name="prefs_title_more_apps">shaobin的更多内容</string>
+    <string name="prefs_summary_more_apps">查看shaobin开发的其他软件</string>
     
     <string name="prefs_title_collect_log">收集日志</string>
     <string name="prefs_summary_collect_log">发送日志给开发者</string>

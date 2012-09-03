@@ -1,65 +1,86 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen
-  xmlns:android="http://schemas.android.com/apk/res/android">
-  	
-  	<CheckBoxPreference android:title="@string/prefs_title_listen_call"
-  			android:key="@string/prefs_key_listen_call"
-  			android:defaultValue="true"
-  			android:summaryOn="@string/on"
-  			android:summaryOff="@string/off"/>
-  	<com.hlidskialf.android.preference.SeekBarPreference 
-			android:key="@string/prefs_key_vibrate_time"
-		    android:title="@string/prefs_title_vibrate_time"
-		    android:defaultValue="80"
-		    android:max="240"/>	
-  	
-  	<PreferenceScreen android:title="@string/prefs_title_vibrate_settings"
-  	    android:dependency="@string/prefs_key_listen_call">
-  	    <CheckBoxPreference android:title="@string/prefs_title_outgoing_call"
-	  		android:key="@string/prefs_key_outgoing_call"
-	  		android:defaultValue="false"
-	  		android:summaryOn="@string/on"
-	  		android:summaryOff="@string/off"/>
-  	
-	  	<CheckBoxPreference android:title="@string/prefs_title_incoming_call"
-	  		android:key="@string/prefs_key_incoming_call"
-	  		android:defaultValue="true"
-	  		android:summaryOn="@string/on"
-	  		android:summaryOff="@string/off"/>
-	  	
-	  	<CheckBoxPreference android:title="@string/prefs_title_end_call"
-	  		android:key="@string/prefs_key_end_call"
-	  		android:defaultValue="true"
-	  		android:summaryOn="@string/on"
-	  		android:summaryOff="@string/off"/>
-	  		
-	  	<CheckBoxPreference android:title="@string/prefs_title_reminder"
-	  		android:key="@string/prefs_key_reminder"
-	  		android:defaultValue="false"
-	  		android:summaryOn="@string/on"
-	  		android:summaryOff="@string/off"/>
-	
-	  	 <ListPreference android:key="@string/prefs_key_reminder_interval"
-			android:title="@string/prefs_title_reminder_interval"
-			android:dialogTitle="@string/prefs_title_reminder_interval"
-			android:entries="@array/vibrate_interval_entries"
-			android:entryValues="@array/vibrate_interval_entry_values"
-			android:defaultValue="45"
-			android:dependency="@string/prefs_key_reminder"/>
-  	</PreferenceScreen>
-  	
-  	<PreferenceCategory android:title="@string/prefs_category_info">
-  		<cn.yo2.aquarium.callvibrator.AboutPreference android:key="@string/prefs_key_about" 
-  			android:title="@string/prefs_title_about"
-  			android:persistent="false"/>
-  		<Preference android:key="@string/prefs_key_donate_author" android:title="@string/prefs_title_donate_author"
-  			android:persistent="false"
-  			android:summary="@string/prefs_summary_donate_author">
-  			<intent android:action="android.intent.action.VIEW" android:data="https://me.alipay.com/shaobin0604"/>
-  		</Preference>
-  		<Preference android:key="@string/prefs_key_collect_log" 
-  			android:title="@string/prefs_title_collect_log"
-  			android:persistent="false"
-  			android:summary="@string/prefs_summary_collect_log"/>
-  	</PreferenceCategory>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <PreferenceCategory android:title="@string/prefs_category_settings" >
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="@string/prefs_key_listen_call"
+            android:summaryOff="@string/off"
+            android:summaryOn="@string/on"
+            android:title="@string/prefs_title_listen_call" />
+
+        <com.hlidskialf.android.preference.SeekBarPreference
+            android:defaultValue="80"
+            android:key="@string/prefs_key_vibrate_time"
+            android:max="240"
+            android:title="@string/prefs_title_vibrate_time" />
+
+        <PreferenceScreen
+            android:dependency="@string/prefs_key_listen_call"
+            android:title="@string/prefs_title_vibrate_settings" >
+            <CheckBoxPreference
+                android:defaultValue="false"
+                android:key="@string/prefs_key_outgoing_call"
+                android:summaryOff="@string/off"
+                android:summaryOn="@string/on"
+                android:title="@string/prefs_title_outgoing_call" />
+            <CheckBoxPreference
+                android:defaultValue="true"
+                android:key="@string/prefs_key_incoming_call"
+                android:summaryOff="@string/off"
+                android:summaryOn="@string/on"
+                android:title="@string/prefs_title_incoming_call" />
+            <CheckBoxPreference
+                android:defaultValue="true"
+                android:key="@string/prefs_key_end_call"
+                android:summaryOff="@string/off"
+                android:summaryOn="@string/on"
+                android:title="@string/prefs_title_end_call" />
+            <CheckBoxPreference
+                android:defaultValue="false"
+                android:key="@string/prefs_key_reminder"
+                android:summaryOff="@string/off"
+                android:summaryOn="@string/on"
+                android:title="@string/prefs_title_reminder" />
+
+            <ListPreference
+                android:defaultValue="45"
+                android:dependency="@string/prefs_key_reminder"
+                android:dialogTitle="@string/prefs_title_reminder_interval"
+                android:entries="@array/vibrate_interval_entries"
+                android:entryValues="@array/vibrate_interval_entry_values"
+                android:key="@string/prefs_key_reminder_interval"
+                android:title="@string/prefs_title_reminder_interval" />
+        </PreferenceScreen>
+    </PreferenceCategory>
+    <PreferenceCategory android:title="@string/prefs_category_info" >
+        <cn.yo2.aquarium.callvibrator.AboutPreference
+            android:key="@string/prefs_key_about"
+            android:persistent="false"
+            android:title="@string/prefs_title_about" />
+
+        <Preference
+            android:key="@string/prefs_key_donate_author"
+            android:persistent="false"
+            android:summary="@string/prefs_summary_donate_author"
+            android:title="@string/prefs_title_donate_author" >
+            <intent
+                android:action="android.intent.action.VIEW"
+                android:data="https://me.alipay.com/shaobin0604" />
+        </Preference>
+        <Preference
+            android:persistent="false"
+            android:summary="@string/prefs_summary_more_apps"
+            android:title="@string/prefs_title_more_apps" >
+            <intent
+                android:action="android.intent.action.VIEW"
+                android:data="http://aquarium-apps.heroku.com/my_apps.html" />
+        </Preference>
+        <Preference
+            android:key="@string/prefs_key_collect_log"
+            android:persistent="false"
+            android:summary="@string/prefs_summary_collect_log"
+            android:title="@string/prefs_title_collect_log" />
+    </PreferenceCategory>
+
 </PreferenceScreen>

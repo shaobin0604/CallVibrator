@@ -2,13 +2,9 @@ package cn.yo2.aquarium.callvibrator;
 
 import android.app.AlertDialog.Builder;
 import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.content.DialogInterface.OnClickListener;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
-import android.net.Uri;
 import android.preference.DialogPreference;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
@@ -55,18 +51,5 @@ public class AboutPreference extends DialogPreference {
 		versionCode.setText(mContext.getString(R.string.text_build, mAppVersionCode));
 		
 		builder.setView(root);
-		
-		builder.setPositiveButton(R.string.text_more, new OnClickListener() {
-			
-			public void onClick(DialogInterface dialog, int which) {
-				Intent intent = new Intent();
-				intent.setAction(Intent.ACTION_VIEW);
-				intent.setData(Uri.parse(mContext.getString(R.string.url_more)));
-				
-				mContext.startActivity(intent);
-			}
-		});
-		
-		builder.setNegativeButton(android.R.string.cancel, null);
 	}
 }
