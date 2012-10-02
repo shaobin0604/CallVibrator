@@ -18,7 +18,7 @@ public class CallVibratorApp extends Application {
 	static final String TAG = CallVibratorApp.class.getSimpleName();
 	
     private static final int EXECUTE_COMMAND_WAIT_TIME = 5 * 1000;
-    private static final String GRANT_READ_LOGS_PERMISSION_COMMAND = "pm grant cn.yo2.aquarium.callvibrator android.permission.READ_LOGS";
+    private static final String READ_LOGS_PERMISSION = "android.permission.READ_LOGS";
     
     public static final int OUTGOING_CALL_AVAILABLE = 0;
     public static final int OUTGOING_CALL_UNAVAILABLE_NO_SU = 1;
@@ -55,7 +55,7 @@ public class CallVibratorApp extends Application {
 	
 	public boolean isReadLogsPermissionGranted() {
 		PackageManager pm = getPackageManager();
-		return pm.checkPermission("android.permission.READ_LOGS", getPackageName()) == PackageManager.PERMISSION_GRANTED;
+		return pm.checkPermission(READ_LOGS_PERMISSION, getPackageName()) == PackageManager.PERMISSION_GRANTED;
 	}
 	
     public boolean isSDKVersionBelowJellyBean() {
@@ -86,30 +86,23 @@ public class CallVibratorApp extends Application {
         }
         MyLog.i("root access given");
         
+        final String grantPermissionCommand = String.format("pm grant %s %s", getPackageName(), READ_LOGS_PERMISSION);
+        
         try {
             List<String> output = RootTools.sendShell(
-                    GRANT_READ_LOGS_PERMISSION_COMMAND, EXECUTE_COMMAND_WAIT_TIME);
+                    grantPermissionCommand, EXECUTE_COMMAND_WAIT_TIME);
             for (String outputline : output) {
-                MyLog.i(GRANT_READ_LOGS_PERMISSION_COMMAND + "return: " + outputline);
+                MyLog.i(grantPermissionCommand + " returns: " + outputline);
             }
-            
-            if (isReadLogsPermissionGranted()) {
-            	return OUTGOING_CALL_AVAILABLE;
-            } else {
-            	return OUTGOING_CALL_UNAVAILABLE_EXECUTE_COMMAND_ROOTTOOLS_EXCEPTION;
-            }
-            
+           	return OUTGOING_CALL_AVAILABLE;
         } catch (IOException e) {
-            // something went wrong, deal with it here
-            e.printStackTrace();
+            MyLog.e("Error grant permission ", e);
             return OUTGOING_CALL_UNAVAILABLE_EXECUTE_COMMAND_IO_EXCEPTION;
         } catch (RootToolsException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            MyLog.e("Error grant permission ", e);
             return OUTGOING_CALL_UNAVAILABLE_EXECUTE_COMMAND_ROOTTOOLS_EXCEPTION;
         } catch (TimeoutException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            MyLog.e("Error grant permission ", e);
             return OUTGOING_CALL_UNAVAILABLE_EXECUTE_COMMAND_TIMEOUT_EXCEPTION;
         }
     }

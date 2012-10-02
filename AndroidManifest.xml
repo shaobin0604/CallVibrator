@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-	package="cn.yo2.aquarium.callvibrator" android:versionCode="20120804" android:versionName="0.2.1"
+	package="cn.yo2.aquarium.callvibrator" android:versionCode="20121002" android:versionName="0.2.2"
 	android:installLocation="internalOnly">
 
     <uses-sdk android:minSdkVersion="8" android:targetSdkVersion="16"/>
