@@ -1,5 +1,7 @@
 # 通话震动 #
 
+[![Build Status](https://travis-ci.org/shaobin0604/CallVibrator.png?branch=master)](https://travis-ci.org/shaobin0604/CallVibrator)
+
 Android平台最好的通话震动辅助软件。
 
 如果您觉得这个软件还不错，并愿意提供一些资金支持我继续开发的话，我表示衷心的感谢。
