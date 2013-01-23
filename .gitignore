@@ -10,9 +10,13 @@ gen/*
 
 # generated GUI files
 *R.java
+*BuildConfig.java
 
 # vim backup files
 *~
+
+# ant local settings
+local.properties
 
 # proguard generated files
 proguard/*
