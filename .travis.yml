@@ -1,8 +1,9 @@
 language: java
 before_install:
+  - pwd
   # download the latest android sdk and unzip
   - wget http://dl.google.com/android/android-sdk_r18-linux.tgz
-  - tar -zxf android-sdk_r18-linux.tgz
+  - tar -zxfv android-sdk_r18-linux.tgz
   # setup your ANDROID_HOME and PATH environment variables
   # use ~/builds/[Github username]/[project]/android-sdk-linux
   - export ANDROID_HOME=~/builds/shaobin0604/CallVibrator/android-sdk-linux
