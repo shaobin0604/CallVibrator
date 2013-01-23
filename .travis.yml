@@ -1,6 +1,6 @@
 language: java
 before_install:
-  - pwd
+  - sudo apt-get install ia32-libs
   # download the latest android sdk and unzip
   - wget http://dl.google.com/android/android-sdk_r18-linux.tgz
   - tar -zxf android-sdk_r18-linux.tgz
