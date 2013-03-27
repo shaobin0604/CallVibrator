@@ -9,8 +9,8 @@ import static android.util.Log.WARN;
  * This class defines the Logger
  */
 
-public final class MyLog {
-	private static String TAG = "My_LOG_TAG";
+public final class Slog {
+	private static String TAG = "CallVibrator";
 
 	private static boolean USE_DETAIL_LOG = true;	
 	private static boolean USE_IS_LOGGABLE = false;
@@ -30,7 +30,7 @@ public final class MyLog {
 		return !USE_IS_LOGGABLE || android.util.Log.isLoggable(TAG, level);
 	}
 
-	private MyLog() {
+	private Slog() {
 	}
 
 	private static String buildMsg(String msg) {

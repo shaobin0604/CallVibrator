@@ -24,7 +24,7 @@ import android.preference.Preference.OnPreferenceClickListener;
 import android.preference.PreferenceActivity;
 import android.widget.Toast;
 
-import cn.yo2.aquarium.logutils.MyLog;
+import cn.yo2.aquarium.logutils.Slog;
 
 import com.hlidskialf.android.preference.SeekBarPreference;
 import com.stericson.RootTools.RootTools;
@@ -135,12 +135,12 @@ public class MainActivity extends PreferenceActivity implements OnPreferenceChan
         mCollectLog.setOnPreferenceClickListener(this);
         
         if (mApp.isSDKVersionBelowJellyBean()) {
-        	MyLog.d("SDK version below Jelly Bean, skip READ_LOGS permission check");
+        	Slog.d("SDK version below Jelly Bean, skip READ_LOGS permission check");
         	return;
         }
         
         if (mApp.isReadLogsPermissionGranted()) {
-        	MyLog.d("READ_LOGS permission granted");
+        	Slog.d("READ_LOGS permission granted");
         	return;
         }
 
@@ -210,7 +210,7 @@ public class MainActivity extends PreferenceActivity implements OnPreferenceChan
     }
 
     public void setMyReceiverEnabled(boolean enabled) {
-        MyLog.d("enabled = " + enabled);
+        Slog.d("enabled = " + enabled);
         PackageManager packageManager = getPackageManager();
         ComponentName componentName = new ComponentName(this, MyReceiver.class);
         int newState = enabled ? PackageManager.COMPONENT_ENABLED_STATE_ENABLED
@@ -412,7 +412,7 @@ public class MainActivity extends PreferenceActivity implements OnPreferenceChan
             final StringBuilder log = new StringBuilder();
             FileWriter fw = null;
             if (mAdditionalInfo != null) {
-                MyLog.d("Add additional info");
+                Slog.d("Add additional info");
                 log.append(mAdditionalInfo);
                 log.append(LINE_SEPARATOR);
             }
@@ -430,7 +430,7 @@ public class MainActivity extends PreferenceActivity implements OnPreferenceChan
 
                 String[] commandArray = commandLine.toArray(new String[0]);
 
-                MyLog.d("Try to execute: " + Arrays.toString(commandArray));
+                Slog.d("Try to execute: " + Arrays.toString(commandArray));
 
                 Process process = Runtime.getRuntime().exec(commandArray);
                 BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(process.getInputStream()));
@@ -441,30 +441,30 @@ public class MainActivity extends PreferenceActivity implements OnPreferenceChan
                     log.append(LINE_SEPARATOR);
                 }
 
-                MyLog.d("Collect log OK");
+                Slog.d("Collect log OK");
 
                 File appFile = new File(Environment.getExternalStorageDirectory(), APP_LOG);
 
-                MyLog.d("Open file to write log: " + appFile.getAbsolutePath());
+                Slog.d("Open file to write log: " + appFile.getAbsolutePath());
 
                 fw = new FileWriter(appFile);
 
-                MyLog.d("Open file OK");
+                Slog.d("Open file OK");
 
                 fw.write(log.toString());
 
-                MyLog.d("Write log OK");
+                Slog.d("Write log OK");
 
                 return true;
             } catch (IOException e) {
-                MyLog.e("CollectLogTask.doInBackground failed", e);//$NON-NLS-1$
+                Slog.e("CollectLogTask.doInBackground failed", e);//$NON-NLS-1$
                 return false;
             } finally {
                 if (fw != null) {
                     try {
                         fw.close();
                     } catch (IOException e) {
-                        MyLog.e("Close FileWriter Error", e);
+                        Slog.e("Close FileWriter Error", e);
                     }
                 }
             }

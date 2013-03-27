@@ -12,7 +12,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.TimeoutException;
 
-import cn.yo2.aquarium.logutils.MyLog;
+import cn.yo2.aquarium.logutils.Slog;
 
 public class CallVibratorApp extends Application {
 	static final String TAG = CallVibratorApp.class.getSimpleName();
@@ -30,27 +30,27 @@ public class CallVibratorApp extends Application {
 	@Override
 	public void onConfigurationChanged(Configuration newConfig) {
 		super.onConfigurationChanged(newConfig);
-		MyLog.d("onConfigurationChanged() newConfig = " + newConfig);
+		Slog.d("onConfigurationChanged() newConfig = " + newConfig);
 	}
 
 	@Override
 	public void onCreate() {
 		super.onCreate();
 //		MyLog.initLog(TAG, true, true); // only log level above info in release version
-		MyLog.initLog(TAG, true, false); // log everything in debug version
-		MyLog.d("onCreate()");
+		Slog.initLog(TAG, true, false); // log everything in debug version
+		Slog.d("onCreate()");
 	}
 
 	@Override
 	public void onLowMemory() {
 		super.onLowMemory();
-		MyLog.d("onLowMemory()");
+		Slog.d("onLowMemory()");
 	}
 
 	@Override
 	public void onTerminate() {
 		super.onTerminate();
-		MyLog.d("onTerminate()");
+		Slog.d("onTerminate()");
 	}
 	
 	public boolean isReadLogsPermissionGranted() {
@@ -69,22 +69,22 @@ public class CallVibratorApp extends Application {
      */
     public int checkOutgoingCallFeasible() {
         if (isSDKVersionBelowJellyBean()) {
-            MyLog.i("SDK below Jelly Bean");
+            Slog.i("SDK below Jelly Bean");
             return OUTGOING_CALL_AVAILABLE;
         }
-        MyLog.i("SDK above Jelly Bean");
+        Slog.i("SDK above Jelly Bean");
 
         if (!RootTools.isRootAvailable()) {
-            MyLog.i("root not available");
+            Slog.i("root not available");
             return OUTGOING_CALL_UNAVAILABLE_NO_SU;
         }
-        MyLog.i("root available");
+        Slog.i("root available");
 
         if (!RootTools.isAccessGiven()) {
-            MyLog.i("root access not given");
+            Slog.i("root access not given");
             return OUTGOING_CALL_UNAVAILABLE_ACCESS_NOT_GIVEN;
         }
-        MyLog.i("root access given");
+        Slog.i("root access given");
         
         final String grantPermissionCommand = String.format("pm grant %s %s", getPackageName(), READ_LOGS_PERMISSION);
         
@@ -92,17 +92,17 @@ public class CallVibratorApp extends Application {
             List<String> output = RootTools.sendShell(
                     grantPermissionCommand, EXECUTE_COMMAND_WAIT_TIME);
             for (String outputline : output) {
-                MyLog.i(grantPermissionCommand + " returns: " + outputline);
+                Slog.i(grantPermissionCommand + " returns: " + outputline);
             }
            	return OUTGOING_CALL_AVAILABLE;
         } catch (IOException e) {
-            MyLog.e("Error grant permission ", e);
+            Slog.e("Error grant permission ", e);
             return OUTGOING_CALL_UNAVAILABLE_EXECUTE_COMMAND_IO_EXCEPTION;
         } catch (RootToolsException e) {
-            MyLog.e("Error grant permission ", e);
+            Slog.e("Error grant permission ", e);
             return OUTGOING_CALL_UNAVAILABLE_EXECUTE_COMMAND_ROOTTOOLS_EXCEPTION;
         } catch (TimeoutException e) {
-            MyLog.e("Error grant permission ", e);
+            Slog.e("Error grant permission ", e);
             return OUTGOING_CALL_UNAVAILABLE_EXECUTE_COMMAND_TIMEOUT_EXCEPTION;
         }
     }
