@@ -3,6 +3,7 @@ package cn.yo2.aquarium.callvibrator;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.lang.ref.WeakReference;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -29,7 +30,8 @@ import cn.yo2.aquarium.logutils.Slog;
 
 public class CallStateService extends Service {
 	private static final int ONE_MINUTE_IN_MILLIS = 60 * 1000;
-
+	private static final int DISMISS_FLOAT_VIEW_DELAY_IN_MILLIS = 10 * 1000;
+	
 	public static final int DEFAULT_VIBRATE_TIME = 80;
 	public static final String DEFAULT_REMINDER_TIME_STR = "45";
 	
@@ -61,30 +63,48 @@ public class CallStateService extends Service {
 	private long mVibrateTime;
 
 	private static final int WHAT_REMINDER_VIBRATE = 1;
+	private static final int WHAT_DISMISS_FLOAT_VIEW = 2;
 
 	private TextView mTvFloatPhoneNumber;
 
-	private Handler mHandler = new Handler() {
+	private Handler mHandler = new EventHandler(this);
+	
+	private static class EventHandler extends Handler {
+	    
+	    private final WeakReference<CallStateService> mService; 
 
-		@Override
-		public void handleMessage(Message msg) {
-			switch (msg.what) {
-			case WHAT_REMINDER_VIBRATE: {
-				if (mReminder && mInCall) {
-					Slog.d("one minute plus interval time out, vibrate");
-					mVibrator.vibrate(mVibrateTime);
-					Slog.d("wait 1 minute for next vibrate");
-					this.sendEmptyMessageDelayed(WHAT_REMINDER_VIBRATE,
-							ONE_MINUTE_IN_MILLIS);
-				}
-				break;
-			}
-			default:
-				break;
-			}
-		}
-
-	};
+	    EventHandler(CallStateService service) {
+	        mService = new WeakReference<CallStateService>(service);
+	    }
+	    
+	    @Override
+        public void handleMessage(Message msg) {
+	        CallStateService service = mService.get();
+	        
+	        if (service == null) {
+	            return;
+	        }
+	        
+            switch (msg.what) {
+            case WHAT_REMINDER_VIBRATE: {
+                if (service.mReminder && service.mInCall) {
+                    Slog.d("one minute plus interval time out, vibrate");
+                    service.mVibrator.vibrate(service.mVibrateTime);
+                    Slog.d("wait 1 minute for next vibrate");
+                    sendEmptyMessageDelayed(WHAT_REMINDER_VIBRATE,
+                            ONE_MINUTE_IN_MILLIS);
+                }
+                break;
+            }
+            case WHAT_DISMISS_FLOAT_VIEW: {
+                service.dismissFloatPhoneNumber();
+                break;
+            }
+            default:
+                break;
+            }
+        }
+	}
 
 	// -------------- use AlarmManager to do timer -----------------------------
 
@@ -181,29 +201,38 @@ public class CallStateService extends Service {
 
 	};
 
-	private void showFloatPhoneNumber(String phoneNumber) {
+	private void showFloatPhoneNumber(String phoneNumber, boolean incoming) {
 	    Slog.d("E, phoneNumber: " + phoneNumber);
-		WindowManager wm = (WindowManager) getApplicationContext()
-				.getSystemService(WINDOW_SERVICE);
-		WindowManager.LayoutParams params = new WindowManager.LayoutParams();
-		params.type = WindowManager.LayoutParams.TYPE_SYSTEM_OVERLAY;
+	    
+	    if (mTvFloatPhoneNumber == null) {
+	        WindowManager wm = (WindowManager) getApplicationContext()
+                    .getSystemService(WINDOW_SERVICE);
+            WindowManager.LayoutParams params = new WindowManager.LayoutParams();
+            params.type = WindowManager.LayoutParams.TYPE_SYSTEM_OVERLAY;
 
-		params.width = WindowManager.LayoutParams.WRAP_CONTENT;
-		params.height = WindowManager.LayoutParams.WRAP_CONTENT;
+            params.width = WindowManager.LayoutParams.WRAP_CONTENT;
+            params.height = WindowManager.LayoutParams.WRAP_CONTENT;
 
-		mTvFloatPhoneNumber = new TextView(this);
-		mTvFloatPhoneNumber.setText("incoming number: " + phoneNumber);
-		wm.addView(mTvFloatPhoneNumber, params);
+            mTvFloatPhoneNumber = new TextView(this);
+            mTvFloatPhoneNumber.setText((incoming ? "incoming " : "outgoing ") + " number: " + phoneNumber);
+            wm.addView(mTvFloatPhoneNumber, params);
+	    } else {
+	        mTvFloatPhoneNumber.setText((incoming ? "incoming " : "outgoing ") + " number: " + phoneNumber);
+	    }
+	    
+		
 		Slog.d("X");
 	}
 
-	private void dimissFloatPhoneNumber() {
+	private void dismissFloatPhoneNumber() {
+	    Slog.d("E");
 		if (mTvFloatPhoneNumber != null) {
 			WindowManager wm = (WindowManager) getApplicationContext()
 					.getSystemService(WINDOW_SERVICE);
 			wm.removeView(mTvFloatPhoneNumber);
 			mTvFloatPhoneNumber = null;
 		}
+		Slog.d("X");
 	}
 
 	private boolean isCDMASim() {
@@ -320,10 +349,12 @@ public class CallStateService extends Service {
 		String action = intent.getAction();
 		if (ACTION_OUTGOING_CALL.equals(action)) {
 		    String phoneNumber = intent.getStringExtra(Intent.EXTRA_PHONE_NUMBER);
-		    showFloatPhoneNumber(phoneNumber);
+		    showFloatPhoneNumber(phoneNumber, false);
+		    
+		    mHandler.sendEmptyMessageDelayed(WHAT_DISMISS_FLOAT_VIEW, DISMISS_FLOAT_VIEW_DELAY_IN_MILLIS);
 		} else if (ACTION_INCOMING_CALL.equals(action)) {
 		    String phoneNumber = intent.getStringExtra(TelephonyManager.EXTRA_INCOMING_NUMBER);
-            showFloatPhoneNumber(phoneNumber);
+            showFloatPhoneNumber(phoneNumber, true);
 		}
 
 		if (!mListenOutgoingCall && !mListenIncomingCall && !mListenEndCall
@@ -486,7 +517,7 @@ public class CallStateService extends Service {
 
 		Slog.d("OnDestroy");
 
-		dimissFloatPhoneNumber();
+		dismissFloatPhoneNumber();
 
 		mHandler.removeMessages(WHAT_REMINDER_VIBRATE);
 
