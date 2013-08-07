@@ -327,7 +327,7 @@ public class CallStateService extends Service {
 				Runtime runtime = Runtime.getRuntime();
 				// run logcat
 				
-				String command = "/system/bin/logcat -b radio -s GSM:D";
+				String command = "/system/bin/logcat -b radio -s GsmConnection:D";
 				switch (mOperatorMode) {
 				case OPERATOR_MODE_CDMA:
 					command = "/system/bin/logcat -b radio -s CDMA:D";

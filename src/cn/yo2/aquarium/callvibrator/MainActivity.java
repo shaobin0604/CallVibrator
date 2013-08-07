@@ -1,6 +1,14 @@
 
 package cn.yo2.aquarium.callvibrator;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.Arrays;
+
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
@@ -22,23 +30,10 @@ import android.preference.Preference;
 import android.preference.Preference.OnPreferenceChangeListener;
 import android.preference.Preference.OnPreferenceClickListener;
 import android.preference.PreferenceActivity;
-import android.widget.Toast;
-
 import cn.yo2.aquarium.logutils.MyLog;
 
 import com.hlidskialf.android.preference.SeekBarPreference;
 import com.stericson.RootTools.RootTools;
-import com.stericson.RootTools.RootToolsException;
-
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.concurrent.TimeoutException;
 
 public class MainActivity extends PreferenceActivity implements OnPreferenceChangeListener,
         OnSharedPreferenceChangeListener, OnPreferenceClickListener {

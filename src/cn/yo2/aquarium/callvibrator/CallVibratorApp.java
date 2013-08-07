@@ -1,18 +1,19 @@
 package cn.yo2.aquarium.callvibrator;
 
-import android.app.Application;
-import android.content.pm.PackageManager;
-import android.content.res.Configuration;
-import android.os.Build;
-
-import com.stericson.RootTools.RootTools;
-import com.stericson.RootTools.RootToolsException;
-
 import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.TimeoutException;
 
+import android.app.Application;
+import android.content.pm.PackageManager;
+import android.content.res.Configuration;
+import android.os.Build;
 import cn.yo2.aquarium.logutils.MyLog;
+
+import com.stericson.RootTools.RootTools;
+import com.stericson.RootTools.exceptions.RootDeniedException;
+import com.stericson.RootTools.exceptions.RootToolsException;
+import com.stericson.RootTools.execution.Command;
 
 public class CallVibratorApp extends Application {
 	static final String TAG = CallVibratorApp.class.getSimpleName();
@@ -26,6 +27,8 @@ public class CallVibratorApp extends Application {
     public static final int OUTGOING_CALL_UNAVAILABLE_EXECUTE_COMMAND_IO_EXCEPTION = 3;
     public static final int OUTGOING_CALL_UNAVAILABLE_EXECUTE_COMMAND_ROOTTOOLS_EXCEPTION = 4;
     public static final int OUTGOING_CALL_UNAVAILABLE_EXECUTE_COMMAND_TIMEOUT_EXCEPTION = 5;
+    public static final int OUTGOING_CALL_UNAVAILABLE_EXECUTE_COMMAND_INTERRUPTED_EXCEPTION = 6;
+    public static final int OUTGOING_CALL_UNAVAILABLE_EXECUTE_COMMAND_DENIED_EXCEPTION = 7;
 
 	@Override
 	public void onConfigurationChanged(Configuration newConfig) {
@@ -89,21 +92,33 @@ public class CallVibratorApp extends Application {
         final String grantPermissionCommand = String.format("pm grant %s %s", getPackageName(), READ_LOGS_PERMISSION);
         
         try {
-            List<String> output = RootTools.sendShell(
-                    grantPermissionCommand, EXECUTE_COMMAND_WAIT_TIME);
-            for (String outputline : output) {
-                MyLog.i(grantPermissionCommand + " returns: " + outputline);
-            }
+//            List<String> output = RootTools.sendShell(
+//                    grantPermissionCommand, EXECUTE_COMMAND_WAIT_TIME);
+//            for (String line : output) {
+//                MyLog.i(grantPermissionCommand + " returns: " + line);
+//            }
+            
+            Command command = new Command(0, EXECUTE_COMMAND_WAIT_TIME, grantPermissionCommand) {
+                
+                @Override
+                public void output(int id, String line) {
+                    MyLog.i(grantPermissionCommand + " returns: " + line);
+                }
+            };
+            RootTools.getShell(true).add(command).waitForFinish();
            	return OUTGOING_CALL_AVAILABLE;
         } catch (IOException e) {
             MyLog.e("Error grant permission ", e);
             return OUTGOING_CALL_UNAVAILABLE_EXECUTE_COMMAND_IO_EXCEPTION;
-        } catch (RootToolsException e) {
-            MyLog.e("Error grant permission ", e);
-            return OUTGOING_CALL_UNAVAILABLE_EXECUTE_COMMAND_ROOTTOOLS_EXCEPTION;
         } catch (TimeoutException e) {
             MyLog.e("Error grant permission ", e);
             return OUTGOING_CALL_UNAVAILABLE_EXECUTE_COMMAND_TIMEOUT_EXCEPTION;
+        } catch (InterruptedException e) {
+            MyLog.e("Error grant permission", e);
+            return OUTGOING_CALL_UNAVAILABLE_EXECUTE_COMMAND_INTERRUPTED_EXCEPTION;
+        } catch (RootDeniedException e) {
+            MyLog.e("Error grant permission", e);
+            return OUTGOING_CALL_UNAVAILABLE_EXECUTE_COMMAND_DENIED_EXCEPTION;
         }
     }
 
