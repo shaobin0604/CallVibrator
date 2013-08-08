@@ -92,12 +92,6 @@ public class CallVibratorApp extends Application {
         final String grantPermissionCommand = String.format("pm grant %s %s", getPackageName(), READ_LOGS_PERMISSION);
         
         try {
-//            List<String> output = RootTools.sendShell(
-//                    grantPermissionCommand, EXECUTE_COMMAND_WAIT_TIME);
-//            for (String line : output) {
-//                MyLog.i(grantPermissionCommand + " returns: " + line);
-//            }
-            
             Command command = new Command(0, EXECUTE_COMMAND_WAIT_TIME, grantPermissionCommand) {
                 
                 @Override
@@ -106,6 +100,9 @@ public class CallVibratorApp extends Application {
                 }
             };
             RootTools.getShell(true).add(command).waitForFinish();
+            
+            boolean ret = isReadLogsPermissionGranted();
+            
            	return OUTGOING_CALL_AVAILABLE;
         } catch (IOException e) {
             MyLog.e("Error grant permission ", e);
