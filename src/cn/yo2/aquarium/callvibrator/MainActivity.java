@@ -330,13 +330,8 @@ public class MainActivity extends PreferenceActivity implements OnPreferenceChan
 			case CallVibratorApp.OUTGOING_CALL_UNAVAILABLE_ACCESS_NOT_GIVEN:
 				alertDialog.setMessage(getString(R.string.msg_grant_read_logs_permission_error_access_not_given));
 				break;
-			case CallVibratorApp.OUTGOING_CALL_UNAVAILABLE_EXECUTE_COMMAND_IO_EXCEPTION:
-			case CallVibratorApp.OUTGOING_CALL_UNAVAILABLE_EXECUTE_COMMAND_ROOTTOOLS_EXCEPTION:
-			case CallVibratorApp.OUTGOING_CALL_UNAVAILABLE_EXECUTE_COMMAND_TIMEOUT_EXCEPTION:
-				alertDialog.setMessage(getString(R.string.msg_grant_read_logs_permission_error_execute_command));
-				break;
-
 			default:
+				alertDialog.setMessage(getString(R.string.msg_grant_read_logs_permission_error_execute_command));
 				break;
 			}
 			break;

@@ -29,6 +29,7 @@ public class CallVibratorApp extends Application {
     public static final int OUTGOING_CALL_UNAVAILABLE_EXECUTE_COMMAND_TIMEOUT_EXCEPTION = 5;
     public static final int OUTGOING_CALL_UNAVAILABLE_EXECUTE_COMMAND_INTERRUPTED_EXCEPTION = 6;
     public static final int OUTGOING_CALL_UNAVAILABLE_EXECUTE_COMMAND_DENIED_EXCEPTION = 7;
+    public static final int OUTGOING_CALL_UNAVAILABLE_EXECUTE_COMMAND_UNKNOWN_ERROR = 8;
 
 	@Override
 	public void onConfigurationChanged(Configuration newConfig) {
@@ -39,8 +40,11 @@ public class CallVibratorApp extends Application {
 	@Override
 	public void onCreate() {
 		super.onCreate();
-//		MyLog.initLog(TAG, true, true); // only log level above info in release version
-		MyLog.initLog(TAG, true, false); // log everything in debug version
+		if (BuildConfig.DEBUG) {
+		    MyLog.initLog(TAG, true, false); // log everything in debug version
+		} else {
+		    MyLog.initLog(TAG, true, true); // only log level above info in release version
+		}
 		MyLog.d("onCreate()");
 	}
 
@@ -101,9 +105,13 @@ public class CallVibratorApp extends Application {
             };
             RootTools.getShell(true).add(command).waitForFinish();
             
+            Thread.sleep(1000); // sleep 1 second
+            
             boolean ret = isReadLogsPermissionGranted();
             
-           	return OUTGOING_CALL_AVAILABLE;
+            MyLog.d("is read log permission granted: " + ret);
+            
+           	return (ret ? OUTGOING_CALL_AVAILABLE : OUTGOING_CALL_UNAVAILABLE_EXECUTE_COMMAND_UNKNOWN_ERROR);
         } catch (IOException e) {
             MyLog.e("Error grant permission ", e);
             return OUTGOING_CALL_UNAVAILABLE_EXECUTE_COMMAND_IO_EXCEPTION;

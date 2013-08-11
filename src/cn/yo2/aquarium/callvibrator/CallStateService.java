@@ -79,33 +79,6 @@ public class CallStateService extends Service {
 
     };
 
-    // -------------- use AlarmManager to do timer -----------------------------
-
-    // private static final String ACTION_REMINDER_VIBRATE =
-    // "ACTION_REMINDER_VIBRATE";
-    //
-    // private BroadcastReceiver mTimerReceiver = new BroadcastReceiver() {
-    //
-    // @Override
-    // public void onReceive(Context context, Intent intent) {
-    // if (ACTION_REMINDER_VIBRATE.equals(intent.getAction())) {
-    // if (mReminder && mInCall) {
-    // MyLog.d("one minute plus interval time out, vibrate");
-    // mVibrator.vibrate(mVibrateTime);
-    // MyLog.d("wait 1 minute for next vibrate");
-    //
-    // PendingIntent operation = PendingIntent.getBroadcast(context, 0, new
-    // Intent(ACTION_REMINDER_VIBRATE), 0);
-    //
-    // mAlarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP,
-    // SystemClock.elapsedRealtime() + ONE_MINUTE_IN_MILLIS, operation);
-    // }
-    // }
-    // }
-    // };
-
-    // -------------------------------------------------------------------------
-
     private PhoneStateListener mListener = new PhoneStateListener() {
 
         @Override
@@ -192,19 +165,16 @@ public class CallStateService extends Service {
         return "46003".equals(simOp);
     }
 
-    private static final DateFormat DF = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSSZ");
+    private static final DateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSSZ");
 
     private static CharSequence formatTimeStr(long inTimeInMillis) {
-        return DF.format(new Date(inTimeInMillis));
+        return DATE_FORMAT.format(new Date(inTimeInMillis));
     }
 
     private void startWorkerThread() {
         stopWorkerThread();
 
-        int mode = isCDMASim() ? OutgoingCallWorkerThread.OPERATOR_MODE_CDMA
-                : OutgoingCallWorkerThread.OPERATOR_MODE_GSM;
-
-        mWorkerThread = new OutgoingCallWorkerThread(mode);
+        mWorkerThread = new OutgoingCallWorkerThread();
         mWorkerThread.start();
     }
 
@@ -297,25 +267,12 @@ public class CallStateService extends Service {
     }
 
     private class OutgoingCallWorkerThread extends Thread {
-        public static final int OPERATOR_MODE_GSM = 0;
-        public static final int OPERATOR_MODE_CDMA = 1;
-
-        private static final int CONNECT_TIME_DELAY = 1000;
+        private static final int CONNECT_TIME_DELAY = 5000;
 
         private volatile boolean mIsRequestKill;
         private volatile boolean mProcessDestroied;
 
-        private int mOperatorMode;
         private Process mProcess;
-
-        public OutgoingCallWorkerThread() {
-            this(OPERATOR_MODE_GSM);
-        }
-
-        public OutgoingCallWorkerThread(int operatorMode) {
-            super();
-            mOperatorMode = operatorMode;
-        }
 
         public synchronized void requestKill() {
             mIsRequestKill = true;
@@ -327,42 +284,42 @@ public class CallStateService extends Service {
         }
 
         public void run() {
-            MyLog.d("OutgoingCallWorkerThread in mode = " + (mOperatorMode == 0 ? "GSM" : "CDMA"));
+            MyLog.d("OutgoingCallWorkerThread E");
 
             // run logcat
-            String regex = "\\[GSMConn\\] onConnectedInOrOut: connectTime=(\\d+)";
-            String command = "/system/bin/logcat -b radio -s GsmConnection:D GSM:D";
-            switch (mOperatorMode) {
-                case OPERATOR_MODE_CDMA:
-                    command = "/system/bin/logcat -b radio -s CDMA:D";
-                    regex = "\\[CDMAConn\\] onConnectedInOrOut: connectTime=(\\d+)";
-                    break;
-                default:
-                    break;
-            }
+            final String regex = "onConnectedInOrOut: connectTime=(\\d+)";
 
-            Pattern pattern = Pattern.compile(regex);
-            mProcess = null;
+            final Pattern pattern = Pattern.compile(regex);
             BufferedReader reader = null;
             try {
                 Runtime runtime = Runtime.getRuntime();
+                
+//                mProcess = runtime.exec(new String[] {"logcat", "-c"});
+//                
+//                MyLog.d(">>>>> Process.waitFor");
+//                mProcess.waitFor();
+//                MyLog.d("<<<<< Process.waitFor");
 
-                mProcess = runtime.exec(command);
+                mProcess = runtime.exec(new String[] {"logcat", "-b", "radio"});
 
                 reader = new BufferedReader(new InputStreamReader(mProcess
-                        .getInputStream()));
+                        .getInputStream()), 1024);
 
                 String line;
 
                 while (!killRequested()) {
                     MyLog.d(">>>>> readLine");
                     line = reader.readLine();
-                    MyLog.d("<<<<< readLine");
-                    if (!TextUtils.isEmpty(line)) {
+                    MyLog.d("<<<<< readLine, line: " + line);
+                    if (TextUtils.isEmpty(line)) {
+                        break;
+                    } else {
                         logLine(pattern, line);
                     }
                 }
+                MyLog.d(">>>>> Process.waitFor");
                 mProcess.waitFor();
+                MyLog.d("<<<<< Process.waitFor");
             } catch (IOException e) {
                 MyLog.e("Error when execute logcat", e);
             } catch (InterruptedException e) {
@@ -384,15 +341,16 @@ public class CallStateService extends Service {
         }
 
         private void destroyProcess() {
+            MyLog.d("destroyProcess E");
             if (mProcess != null && !mProcessDestroied) {
+                MyLog.d("call process destroy");
                 mProcess.destroy();
                 mProcessDestroied = true;
             }
+            MyLog.d("destroyProcess X");
         }
 
         private void logLine(Pattern pattern, String line) {
-            MyLog.d(line);
-
             long time = System.currentTimeMillis();
 
             Matcher matcher = pattern.matcher(line);
