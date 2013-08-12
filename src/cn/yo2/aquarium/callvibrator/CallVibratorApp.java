@@ -104,14 +104,12 @@ public class CallVibratorApp extends Application {
                 }
             };
             RootTools.getShell(true).add(command).waitForFinish();
-            
-            Thread.sleep(1000); // sleep 1 second
-            
-            boolean ret = isReadLogsPermissionGranted();
-            
-            MyLog.d("is read log permission granted: " + ret);
-            
-           	return (ret ? OUTGOING_CALL_AVAILABLE : OUTGOING_CALL_UNAVAILABLE_EXECUTE_COMMAND_UNKNOWN_ERROR);
+
+            //          Thread.sleep(1000); // sleep 1 second
+//          boolean ret = isReadLogsPermissionGranted();
+//          MyLog.d("is read log permission granted: " + ret);
+//          return (ret ? OUTGOING_CALL_AVAILABLE : OUTGOING_CALL_UNAVAILABLE_EXECUTE_COMMAND_UNKNOWN_ERROR);
+            return OUTGOING_CALL_AVAILABLE;
         } catch (IOException e) {
             MyLog.e("Error grant permission ", e);
             return OUTGOING_CALL_UNAVAILABLE_EXECUTE_COMMAND_IO_EXCEPTION;

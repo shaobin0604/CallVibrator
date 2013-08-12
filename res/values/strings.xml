@@ -63,7 +63,7 @@
     
     <string name="msg_read_logs_permission_issue_in_jelly_bean"><b>Call Vibrator</b> requires <i>READ_LOGS</i> permission to detect when outgoing call is answered, but this permission is not granted to 3rd party applications in <b>Jelly Bean</b>. You must grant <i>READ_LOGS</i> permission to Call Vibrator app manually as <b>ROOT</b> user.</string>
     <string name="msg_grant_read_logs_permission_progress">Granting <i>READ_LOGS</i> permission to Call Vibrator app…</string>
-    <string name="msg_grant_read_logs_permission_ok">Grant <i>READ_LOGS</i> permission to Call Vibrator app successful, please reboot your phone to take effect</string>
+    <string name="msg_grant_read_logs_permission_ok">Grant <i>READ_LOGS</i> permission to Call Vibrator app successful</string>
     <string name="msg_grant_read_logs_permission_error_no_su">Your device has not been rooted</string>
     <string name="msg_grant_read_logs_permission_error_access_not_given">Cannot switch to <b>ROOT</b> user</string>
     <string name="msg_grant_read_logs_permission_error_execute_command">Fail to grant <i>READ_LOGS</i> permission to Call Vibrator</string>

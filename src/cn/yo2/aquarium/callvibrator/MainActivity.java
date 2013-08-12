@@ -81,6 +81,8 @@ public class MainActivity extends PreferenceActivity implements OnPreferenceChan
     private String mAdditionalInfo;
 
     private String mFormat = "time";
+    
+    private boolean mExitApp;
 
     /** Called when the activity is first created. */
     @SuppressWarnings("deprecation")
@@ -131,11 +133,15 @@ public class MainActivity extends PreferenceActivity implements OnPreferenceChan
         
         if (mApp.isSDKVersionBelowJellyBean()) {
         	MyLog.d("SDK version below Jelly Bean, skip READ_LOGS permission check");
+        	setOutgoingCallPrefsEnabled(true);
+        	setOutgoingCallPrefsChecked(true);
         	return;
         }
         
         if (mApp.isReadLogsPermissionGranted()) {
         	MyLog.d("READ_LOGS permission granted");
+        	setOutgoingCallPrefsEnabled(true);
+            setOutgoingCallPrefsChecked(true);
         	return;
         }
 
@@ -159,6 +165,15 @@ public class MainActivity extends PreferenceActivity implements OnPreferenceChan
         super.onPause();
 
         mSharedPreferences.unregisterOnSharedPreferenceChangeListener(this);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        MyLog.d("onStop, E mExitApp: " + mExitApp);
+        if (mExitApp) {
+            System.exit(0);
+        }
     }
 
     @Override
@@ -361,8 +376,12 @@ public class MainActivity extends PreferenceActivity implements OnPreferenceChan
 		protected void onPostExecute(Integer result) {
 			dismissDialog(DLG_GRANT_READ_LOG_PERMISSION_PROGRESS);
 			
-			setOutgoingCallPrefsEnabled(result == CallVibratorApp.OUTGOING_CALL_AVAILABLE);
-			
+			boolean enabled = result == CallVibratorApp.OUTGOING_CALL_AVAILABLE;
+            setOutgoingCallPrefsEnabled(enabled);
+            setOutgoingCallPrefsChecked(enabled);
+			if (enabled) {
+			    mExitApp = true;
+			}
 			Bundle bundle = new Bundle();
 			bundle.putInt("result", result);
 			showDialog(DLG_GRANT_READ_LOG_PERMISSION_RESULT, bundle);
@@ -372,6 +391,10 @@ public class MainActivity extends PreferenceActivity implements OnPreferenceChan
     private void setOutgoingCallPrefsEnabled(boolean enabled) {
     	mOutgoingCallPrefs.setEnabled(enabled);
     	mReminderPrefs.setEnabled(enabled);
+    }
+    
+    private void setOutgoingCallPrefsChecked(boolean checked) {
+        mOutgoingCallPrefs.setChecked(checked);
     }
 
     private class CollectLogTask extends AsyncTask<ArrayList<String>, Void, Boolean> {

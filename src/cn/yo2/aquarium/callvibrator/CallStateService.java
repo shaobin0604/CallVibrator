@@ -294,11 +294,16 @@ public class CallStateService extends Service {
             try {
                 Runtime runtime = Runtime.getRuntime();
                 
-//                mProcess = runtime.exec(new String[] {"logcat", "-c"});
-//                
-//                MyLog.d(">>>>> Process.waitFor");
-//                mProcess.waitFor();
-//                MyLog.d("<<<<< Process.waitFor");
+                mProcess = runtime.exec(new String[] {"logcat", "-c", "-b", "radio"});
+                
+                MyLog.d(">>>>> clear log Process.waitFor");
+                mProcess.waitFor();
+                MyLog.d("<<<<< clear log Process.waitFor");
+                
+                if (killRequested()) {
+                    MyLog.d("kill requested");
+                    return;
+                }
 
                 mProcess = runtime.exec(new String[] {"logcat", "-b", "radio"});
 
