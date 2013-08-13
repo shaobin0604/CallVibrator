@@ -46,12 +46,7 @@ public class MainActivity extends PreferenceActivity implements OnPreferenceChan
     private static final int DLG_READ_LOG_PERMISSION_POLICY = 3000;
     private static final int DLG_GRANT_READ_LOG_PERMISSION_PROGRESS = 4000;
     private static final int DLG_GRANT_READ_LOG_PERMISSION_RESULT = 5000;
-	
-	
 
-    static {
-        RootTools.debugMode = true;
-    }
     private CallVibratorApp mApp;
 
     private CheckBoxPreference mOutgoingCallPrefs;

@@ -40,6 +40,7 @@ public class CallVibratorApp extends Application {
 	@Override
 	public void onCreate() {
 		super.onCreate();
+		RootTools.debugMode = BuildConfig.DEBUG;
 		if (BuildConfig.DEBUG) {
 		    MyLog.initLog(TAG, true, false); // log everything in debug version
 		} else {

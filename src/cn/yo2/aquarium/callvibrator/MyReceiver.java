@@ -18,7 +18,6 @@ public class MyReceiver extends BroadcastReceiver {
 			Intent service = new Intent(context, CallStateService.class);
 	        context.startService(service);
 		} else if (TelephonyManager.ACTION_PHONE_STATE_CHANGED.equals(action)) {
-			
 			String state = intent.getStringExtra(TelephonyManager.EXTRA_STATE);
 			if (TelephonyManager.EXTRA_STATE_RINGING.equals(state)) {
 				Intent service = new Intent(context, CallStateService.class);

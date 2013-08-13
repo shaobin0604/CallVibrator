@@ -1,6 +1,23 @@
+## 版本 0.2.3 2013-08-13 ##
+
+*   *New* Android 4.1 及以上设备授予 `READ_LOGS` 权限给应用之后不再需要重启设备
+*   *Fix* Android 4.3 设备上呼出接通震动失效。
+*   *Fix* 在Nexus S **SlimRom** Android 4.2.2 上呼出接通震动失效。
+
+### 感谢以下同学反馈问题
+
+* jakoes
+* ziqiang.lee
+* chris9999
+* 朝朝暮暮
+* galaxy
+* Limey
+* 任林森
+* iscottchina
+
 ## 版本 0.2.2 2012-10-02 ##
 
-*   *Fix* 在某些ROOT后的 Jelly Bean 设备上授予 READ_LOGS 权限给应用失败
+*   *Fix* 在某些ROOT后的 Jelly Bean 设备上授予 `READ_LOGS` 权限给应用失败
 
 ## 版本 0.2.1 2012-08-04 ##
 

@@ -24,11 +24,13 @@ Android平台最好的通话震动辅助软件。
 
 *   HTC G1 Dream(rooted)/CM 5.0.8
 *   Samsung 7680(rooted)/ophone 2.0
-*   Samsung Nexus S(rooted)/stock JellyBean 4.1
 *   Motorola Defy(rooted)/MIUI 2.3.7c
 *   HuaWei T8301/android2.2
 *   K-Touch W606/android2.1
 *   HuaWei C8650
+*   Samsung Nexus S(rooted) 4.1/4.2
+*   Samsung Galaxy Nexus(rooted) 4.1/4.2/4.3
+*   LG Nexus 4(rooted) 4.2/4.3
 
 由于 Android 设备/ROM 众多，如果本软件在您的手机上可以正常工作，还请提供您的设备型号/ROM信息给我，我把它加入到本软件的支持设备列表中，以便新用户参考。如果本软件在您的手机上不能正常工作，还请及时反馈，联系方式：shaobin0604@qq.com。
 
