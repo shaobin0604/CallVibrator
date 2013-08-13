@@ -1,7 +1,6 @@
 package cn.yo2.aquarium.callvibrator;
 
 import java.io.IOException;
-import java.util.List;
 import java.util.concurrent.TimeoutException;
 
 import android.app.Application;
@@ -12,7 +11,6 @@ import cn.yo2.aquarium.logutils.MyLog;
 
 import com.stericson.RootTools.RootTools;
 import com.stericson.RootTools.exceptions.RootDeniedException;
-import com.stericson.RootTools.exceptions.RootToolsException;
 import com.stericson.RootTools.execution.Command;
 
 public class CallVibratorApp extends Application {
