@@ -27,11 +27,12 @@ Android平台最好的通话震动辅助软件。
 *   Motorola Defy(rooted)/MIUI 2.3.7c
 *   HuaWei T8301 2.2
 *   K-Touch W606 2.1
-*   HuaWei C8650 2.2 **CDMA**
-*   HTC S710d 4.0.3 **CDMA**
-*   Samsung Nexus S(rooted) 4.1/4.2
 *   Samsung Galaxy Nexus(rooted) 4.1/4.2/4.3
 *   LG Nexus 4(rooted) 4.2/4.3
+*   Samsung Nexus S(rooted) 4.1/4.2
+*   HuaWei C8650 2.2 **CDMA** work
+*   HTC S710d 4.0.3 **CDMA** work
+*   HTC X720d 4.0.3 **CDMA** work, **GSM** not work
 
 由于 Android 设备/ROM 众多，如果本软件在您的手机上可以正常工作，还请提供您的设备型号/ROM信息给我，我把它加入到本软件的支持设备列表中，以便新用户参考。如果本软件在您的手机上不能正常工作，还请及时反馈，联系方式：shaobin0604@qq.com。
 
