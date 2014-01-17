@@ -23,13 +23,15 @@ Android平台最好的通话震动辅助软件。
 以下是目前测试有效的设备/ROM。
 
 *   HTC G1 Dream(rooted)/CM 5.0.8
+*   Google Nexus S(rooted) 4.1/4.2
+*   Google Galaxy Nexus(rooted) 4.1/4.2/4.3
+*   Google Nexus 4(rooted) 4.2/4.3
+*   Google Nexus 5 4.4.2
 *   Samsung 7680(rooted)/ophone 2.0
-*   Motorola Defy(rooted)/MIUI 2.3.7c
+*   Samsung Galaxy III 4.4.2
+*   Motorola Defy(rooted)/MIUI 2.3.7c/CM 10,11
 *   HuaWei T8301 2.2
-*   K-Touch W606 2.1
-*   Samsung Galaxy Nexus(rooted) 4.1/4.2/4.3
-*   LG Nexus 4(rooted) 4.2/4.3
-*   Samsung Nexus S(rooted) 4.1/4.2
+*   K-Touch W606 2.1   
 *   HuaWei C8650 2.2 **CDMA** work
 *   HTC S710d 4.0.3 **CDMA** work
 *   HTC X720d 4.0.3 **CDMA** work, **GSM** not work
